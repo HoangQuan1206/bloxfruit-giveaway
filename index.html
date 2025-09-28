@@ -2,150 +2,104 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Giveaway Account Blox Fruit</title>
+  <title>Nhận tài khoản</title>
   <style>
     body {
-      margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: linear-gradient(135deg, #1a1a1a, #333);
-      color: white;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    .card {
-      background: rgba(255,255,255,0.1);
-      border-radius: 16px;
-      padding: 25px;
-      width: 350px;
+      font-family: Arial, sans-serif;
+      background: #1c1c1c;
+      color: #fff;
       text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-      backdrop-filter: blur(8px);
     }
-    h2 {
-      margin-bottom: 15px;
-      font-size: 22px;
+    .container {
+      width: 350px;
+      margin: 100px auto;
+      padding: 20px;
+      border-radius: 12px;
+      background: #2e2e2e;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
     input {
-      padding: 10px;
       width: 80%;
-      border: none;
+      padding: 10px;
       border-radius: 8px;
-      margin-bottom: 12px;
-      font-size: 15px;
+      border: none;
+      margin-bottom: 10px;
     }
     button {
       padding: 10px 20px;
+      background: #2ecc71;
       border: none;
-      background: #28a745;
-      color: white;
       border-radius: 8px;
-      font-size: 15px;
+      color: white;
       cursor: pointer;
-      transition: 0.3s;
     }
-    button:hover {
-      background: #218838;
-    }
-    .account-box {
+    .info {
       margin-top: 20px;
+      background: #3b3b3b;
       padding: 15px;
-      background: rgba(0,0,0,0.6);
-      border-radius: 12px;
-      display: none;
-      animation: fadeIn 0.6s ease;
+      border-radius: 10px;
+    }
+    .info img {
+      margin-top: 10px;
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
     }
     .copy-btn {
-      margin-left: 10px;
-      padding: 4px 8px;
-      background: #007bff;
-      border: none;
-      color: white;
-      border-radius: 6px;
+      background: #3498db;
+      padding: 3px 8px;
+      border-radius: 5px;
+      margin-left: 5px;
       cursor: pointer;
-    }
-    img.avatar {
-      margin-top: 10px;
-      border-radius: 12px;
-    }
-    img.dragon {
-      margin-top: 20px;
-      width: 120px;
-      animation: bounce 1s infinite;
-    }
-    .footer {
-      margin-top: 30px;
-      font-size: 14px;
-      color: #ffeb3b;
-    }
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1); }
+      font-size: 12px;
     }
   </style>
 </head>
 <body>
-
-  <div class="card">
+  <div class="container">
     <h2>Nhập mã để nhận tài khoản</h2>
     <input type="text" id="codeInput" placeholder="HOANGLAM_xxxx">
     <br>
-    <button onclick="checkCode()">Nhận ngay</button>
-
-    <div class="account-box" id="accountBox">
-      <p><b>Username:</b> <span id="username"></span> 
-        <button class="copy-btn" onclick="copyText('username')">Copy</button>
-      </p>
-      <p><b>Password:</b> <span id="password"></span> 
-        <button class="copy-btn" onclick="copyText('password')">Copy</button>
-      </p>
-      <img id="avatar" class="avatar" src="" width="150" height="150" alt="Avatar">
-      <br>
-      <img src="https://media.tenor.com/qy4yL_9C5p4AAAAi/dragon-dance.gif" 
-           alt="Rồng nhảy" class="dragon">
-    </div>
+    <button onclick="getAccount()">Nhận ngay</button>
+    <div id="accountInfo" class="info" style="display:none;"></div>
   </div>
 
-  <div class="footer">
-    ✨ Website được làm bởi Phan Hoàng Lâm ✨
-  </div>
+  <script>
+    const accounts = {
+      "HOANGLAM_0001": {username: "MariotClot", password: "NAMHA123", avatar: "https://i.imgur.com/4AiXzf8.jpeg"},
+      "HOANGLAM_0002": {username: "GameMaster", password: "PASS456", avatar: "https://i.imgur.com/OB0y6MR.png"},
+      "HOANGLAM_0003": {username: "DragonSlayer", password: "ABC123", avatar: "https://i.imgur.com/U5s9p2z.jpeg"},
+      "HOANGLAM_0004": {username: "CoolKid", password: "XYZ789", avatar: "https://i.imgur.com/zdwdenZ.jpeg"},
+      "HOANGLAM_0005": {username: "NoobPro", password: "HELLO123", avatar: "https://i.imgur.com/zYxDCQT.png"},
+      "HOANGLAM_0006": {username: "ShadowX", password: "WIN999", avatar: "https://i.imgur.com/vOe4gkN.jpeg"},
+    };
 
-<script>
-  const accounts = {
-    "HOANGLAM_1234": { user: "MariotClot", pass: "NAMHA123" },
-    "HOANGLAM_5678": { user: "LaiT1445", pass: "NAMHA123" },
-    "HOANGLAM_8888": { user: "DragonBoy", pass: "DRAGON888" },
-    "HOANGLAM_9999": { user: "FruitKing", pass: "KING9999" },
-    "HOANGLAM_2025": { user: "OliverVIP", pass: "VIP2025" },
-    "HOANGLAM_4321": { user: "NoobPro", pass: "NOOB4321" }
-  };
-
-  function checkCode() {
-    let code = document.getElementById("codeInput").value.trim();
-    if (accounts[code]) {
-      document.getElementById("username").textContent = accounts[code].user;
-      document.getElementById("password").textContent = accounts[code].pass;
-      document.getElementById("avatar").src = 
-        "https://tr.rbxcdn.com/0bbd54781d6f5b2b3e87c7f55609f2c5/420/420/Avatar/Png";
-      document.getElementById("accountBox").style.display = "block";
-    } else {
-      alert("❌ Mã không hợp lệ!");
-    }
-  }
-
-  function copyText(field) {
-    let text = document.getElementById(field).textContent;
-    navigator.clipboard.writeText(text).then(() => {
+    function copyText(text) {
+      navigator.clipboard.writeText(text);
       alert("Đã copy: " + text);
-    });
-  }
-</script>
+    }
 
+    function getAccount() {
+      const code = document.getElementById("codeInput").value.trim();
+      const infoDiv = document.getElementById("accountInfo");
+
+      if (accounts[code]) {
+        const acc = accounts[code];
+        infoDiv.innerHTML = `
+          <p><b>Username:</b> ${acc.username} 
+            <span class="copy-btn" onclick="copyText('${acc.username}')">Copy</span>
+          </p>
+          <p><b>Password:</b> ${acc.password} 
+            <span class="copy-btn" onclick="copyText('${acc.password}')">Copy</span>
+          </p>
+          <img src="${acc.avatar}" alt="Avatar">
+        `;
+        infoDiv.style.display = "block";
+      } else {
+        infoDiv.innerHTML = "<p style='color:red'>Mã không hợp lệ!</p>";
+        infoDiv.style.display = "block";
+      }
+    }
+  </script>
 </body>
 </html>
