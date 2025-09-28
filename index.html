@@ -5,41 +5,61 @@
   <title>Giveaway Account Blox Fruit</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #1a1a1a, #333);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      background: rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 25px;
+      width: 350px;
       text-align: center;
-      padding: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      backdrop-filter: blur(8px);
     }
     h2 {
-      font-size: 20px;
+      margin-bottom: 15px;
+      font-size: 22px;
     }
     input {
       padding: 10px;
-      width: 250px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      width: 80%;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      font-size: 15px;
     }
     button {
       padding: 10px 20px;
-      margin-top: 10px;
       border: none;
       background: #28a745;
       color: white;
-      border-radius: 6px;
+      border-radius: 8px;
+      font-size: 15px;
       cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #218838;
     }
     .account-box {
       margin-top: 20px;
-      padding: 20px;
-      background: white;
+      padding: 15px;
+      background: rgba(0,0,0,0.6);
       border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
       display: none;
-      animation: pop 0.6s ease;
+      animation: fadeIn 0.6s ease;
     }
     .copy-btn {
       margin-left: 10px;
-      padding: 5px 10px;
+      padding: 4px 8px;
       background: #007bff;
       border: none;
       color: white;
@@ -47,44 +67,59 @@
       cursor: pointer;
     }
     img.avatar {
-      border-radius: 10px;
       margin-top: 10px;
+      border-radius: 12px;
     }
     img.dragon {
-      margin-top: 15px;
+      margin-top: 20px;
+      width: 120px;
+      animation: bounce 1s infinite;
     }
-    @keyframes pop {
-      0% { transform: scale(0.8); opacity: 0; }
-      60% { transform: scale(1.05); opacity: 1; }
-      100% { transform: scale(1); }
+    .footer {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #ffeb3b;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
     }
   </style>
 </head>
 <body>
 
-  <h2>Nhập mã để nhận tài khoản</h2>
-  <input type="text" id="codeInput" placeholder="HOANGLAM_xxxx">
-  <br>
-  <button onclick="checkCode()">Nhận ngay</button>
-
-  <div class="account-box" id="accountBox">
-    <p><b>Username:</b> <span id="username"></span> 
-      <button class="copy-btn" onclick="copyText('username')">Copy</button>
-    </p>
-    <p><b>Password:</b> <span id="password"></span> 
-      <button class="copy-btn" onclick="copyText('password')">Copy</button>
-    </p>
-    <img id="avatar" class="avatar" src="" width="150" height="150" alt="Avatar">
+  <div class="card">
+    <h2>Nhập mã để nhận tài khoản</h2>
+    <input type="text" id="codeInput" placeholder="HOANGLAM_xxxx">
     <br>
-    <img src="https://media.tenor.com/qy4yL_9C5p4AAAAi/dragon-dance.gif" 
-         alt="Rồng nhún nhảy" class="dragon" width="120">
+    <button onclick="checkCode()">Nhận ngay</button>
+
+    <div class="account-box" id="accountBox">
+      <p><b>Username:</b> <span id="username"></span> 
+        <button class="copy-btn" onclick="copyText('username')">Copy</button>
+      </p>
+      <p><b>Password:</b> <span id="password"></span> 
+        <button class="copy-btn" onclick="copyText('password')">Copy</button>
+      </p>
+      <img id="avatar" class="avatar" src="" width="150" height="150" alt="Avatar">
+      <br>
+      <img src="https://media.tenor.com/qy4yL_9C5p4AAAAi/dragon-dance.gif" 
+           alt="Rồng nhảy" class="dragon">
+    </div>
+  </div>
+
+  <div class="footer">
+    ✨ Website được làm bởi Phan Hoàng Lâm ✨
   </div>
 
 <script>
-  // Danh sách mã và tài khoản
   const accounts = {
     "HOANGLAM_1234": { user: "MariotClot", pass: "NAMHA123" },
-    "HOANGLAM_5678": { user: "BaconNo1", pass: "PASS1234" },
+    "HOANGLAM_5678": { user: "LaiT1445", pass: "NAMHA123" },
     "HOANGLAM_8888": { user: "DragonBoy", pass: "DRAGON888" },
     "HOANGLAM_9999": { user: "FruitKing", pass: "KING9999" },
     "HOANGLAM_2025": { user: "OliverVIP", pass: "VIP2025" },
@@ -97,7 +132,7 @@
       document.getElementById("username").textContent = accounts[code].user;
       document.getElementById("password").textContent = accounts[code].pass;
       document.getElementById("avatar").src = 
-        "https://tr.rbxcdn.com/0bbd54781d6f5b2b3e87c7f55609f2c5/420/420/Avatar/Png"; // Bacon Avatar
+        "https://tr.rbxcdn.com/0bbd54781d6f5b2b3e87c7f55609f2c5/420/420/Avatar/Png";
       document.getElementById("accountBox").style.display = "block";
     } else {
       alert("❌ Mã không hợp lệ!");
