@@ -1,885 +1,857 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Giveaway Account — Hoàng Lâm</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Giveaway Accounts — Hoàng Lâm</title>
 
-  <!-- ===========================
-       STYLES
-       ===========================
-       - Font: Times New Roman (user requested)
-       - Main color palette: greys
-       - Layout: 2-column responsive
-       - Modern touches: rounded cards, subtle shadows, transitions
-  -->
-  <style>
-    /* ---------------------------
-       Base / Reset
-       --------------------------- */
-    :root{
-      --gray-bg: #bfbfbf;
-      --panel: #e6e6e6;
-      --panel-2: #dcdcdc;
-      --muted: #6b6b6b;
-      --accent: #8b8b8b;
-      --accent-strong: #6a6a6a;
-      --success: #2f8f2f;
-      --danger: #c04b4b;
-      --shadow: 0 6px 24px rgba(0,0,0,0.15);
-      --radius: 12px;
-    }
+<!--
+  IMPORTANT:
+  - Setup EmailJS as described in the top comment before using "Ghi chú gửi Gmail".
+  - Replace EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY in the JS config.
+-->
 
-    html,body{
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      font-family: "Times New Roman", Times, serif;
-      background: var(--gray-bg);
-      color: #111;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      box-sizing: border-box;
-    }
+<!-- Google font: modern, easy-to-read -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-    /* Apply box-sizing globally */
-    *, *::before, *::after { box-sizing: inherit; }
+<style>
+  /* =========================
+     Reset & Base
+     ========================= */
+  :root{
+    --bg: #e0e0e0;
+    --panel: #f2f2f2;
+    --card: #ededed;
+    --muted: #6c6c6c;
+    --accent: #9e9e9e;       /* button accent */
+    --accent-strong: #7c7c7c;
+    --success: #2f8f2f;
+    --danger: #c43f3f;
+    --radius: 12px;
+    --shadow: 0 10px 30px rgba(0,0,0,0.12);
+  }
 
-    /* Utility classes */
-    .visually-hidden {
-      position: absolute !important;
-      height: 1px; width: 1px;
-      overflow: hidden;
-      clip: rect(1px, 1px, 1px, 1px);
-      white-space: nowrap;
-    }
+  html,body{ height:100%; margin:0; padding:0; background:var(--bg); font-family:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:#111; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
-    /* ---------------------------
-       Page container
-       --------------------------- */
-    .page {
-      max-width: 1100px;
-      margin: 28px auto;
-      padding: 18px;
-      display: grid;
-      gap: 20px;
-      grid-template-columns: 1fr;
-    }
+  *{ box-sizing:border-box; }
 
-    /* On wide screens make two columns */
-    @media(min-width: 860px){
-      .page { grid-template-columns: 1fr 420px; }
-    }
+  /* =========================
+     Layout
+     ========================= */
+  .page {
+    max-width:1200px;
+    margin:28px auto;
+    padding:18px;
+    display:grid;
+    grid-template-columns: 1fr 420px;
+    gap:20px;
+  }
 
-    /* ---------------------------
-       Card style
-       --------------------------- */
-    .card {
-      background: linear-gradient(180deg, var(--panel), var(--panel-2));
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(0,0,0,0.06);
-    }
+  @media (max-width:980px){
+    .page { grid-template-columns: 1fr; padding: 12px; }
+  }
 
-    /* ---------------------------
-       Header
-       --------------------------- */
-    .header {
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
-      margin-bottom: 8px;
-    }
-    .title {
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-size: 22px;
-      font-weight: 700;
-    }
-    .subtitle {
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 4px;
-    }
+  .card {
+    background: linear-gradient(180deg,var(--panel), #e8e8e8);
+    border-radius: var(--radius);
+    padding:18px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0,0,0,0.05);
+  }
 
-    /* ---------------------------
-       Left column (main)
-       --------------------------- */
-    .left {
-      display:flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+  .header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-bottom:8px;
+  }
 
-    .input-row {
-      display:flex;
-      gap: 10px;
-      align-items:center;
-      margin-top: 4px;
-      flex-wrap: wrap;
-    }
+  h1 { font-size:20px; margin:0; display:flex;gap:10px; align-items:center; font-weight:700; }
+  .sub { color:var(--muted); font-size:13px; margin-top:6px; }
 
-    .input-row input[type="text"]{
-      flex: 1 1 320px;
-      padding: 12px 14px;
-      border-radius: 10px;
-      border: 1px solid rgba(0,0,0,0.08);
-      background: white;
-      font-size: 16px;
-      color: #111;
-      outline: none;
-      transition: box-shadow .15s, border-color .15s;
-    }
-    .input-row input[type="text"]:focus{
-      border-color: var(--accent-strong);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
-    }
+  /* =========================
+     Left area: input & result
+     ========================= */
+  .left .controls {
+    display:flex;
+    gap:10px;
+    align-items:center;
+    margin-top:6px;
+    flex-wrap:wrap;
+  }
 
-    .btn {
-      display:inline-block;
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: none;
-      background: var(--accent);
-      color: #fff;
-      font-weight: 700;
-      cursor:pointer;
-      transition: transform .08s ease, opacity .12s ease;
-    }
-    .btn:active { transform: translateY(1px); }
-    .btn.ghost {
-      background: transparent;
-      color: var(--accent-strong);
-      border: 1px solid rgba(0,0,0,0.06);
-    }
-    .btn.warn { background: var(--danger); }
+  .input {
+    flex:1 1 420px;
+    min-width:220px;
+    padding:12px 14px;
+    border-radius:10px;
+    border:1px solid rgba(0,0,0,0.06);
+    background:white;
+    font-size:15px;
+  }
 
-    /* ---------------------------
-       Result panel (left, below input)
-       --------------------------- */
-    .result-panel {
-      margin-top: 10px;
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      align-items: start;
-    }
+  .btn {
+    background:var(--accent);
+    color:white;
+    border:none;
+    padding:10px 14px;
+    border-radius:10px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .btn.ghost {
+    background:transparent; color:var(--accent-strong); border:1px solid rgba(0,0,0,0.06);
+  }
+  .btn.warn { background:var(--danger); }
 
-    .result-inner {
-      border-radius: 10px;
-      padding: 12px;
-      background: rgba(255,255,255,0.85);
-      border: 1px solid rgba(0,0,0,0.06);
-    }
+  .result-card {
+    margin-top:16px;
+    border-radius:10px;
+    padding:12px;
+    background: linear-gradient(180deg,#fff,#fafafa);
+    border:1px solid rgba(0,0,0,0.04);
+    display:none;
+  }
 
-    .field {
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      gap: 8px;
-      padding: 6px 0;
-    }
+  .field {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:8px 0;
+    border-bottom:1px dashed rgba(0,0,0,0.03);
+  }
+  .field:last-child{ border-bottom:none; }
 
-    .field-label {
-      min-width: 100px;
-      font-weight: 700;
-      color: #111;
-    }
+  .label {
+    min-width:110px;
+    font-weight:600;
+    color:#111;
+  }
+  .value {
+    flex:1 1 auto;
+    font-weight:700;
+    color:#111;
+    word-break:break-word;
+    text-align:left;
+  }
 
-    .field-value {
-      flex: 1 1 auto;
-      text-align: left;
-      color: #111;
-      font-weight: 700;
-      word-break: break-word;
-      padding-right: 8px;
-    }
+  .icon-btn {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:8px;
+    border-radius:8px;
+    border:1px solid rgba(0,0,0,0.06);
+    background: #fff;
+    cursor:pointer;
+    font-weight:700;
+  }
 
-    /* copy / eye buttons in result */
-    .small-btn {
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      width:36px;
-      height:36px;
-      border-radius:8px;
-      border:1px solid rgba(0,0,0,0.06);
-      background: #fff;
-      cursor:pointer;
-      font-size:16px;
-      transition: background .12s;
-    }
-    .small-btn:hover { background: #f4f4f4; }
+  .small { font-size:12px; color:var(--muted); }
 
-    /* loader */
-    .loader {
-      width: 40px;
-      height: 40px;
-      border-radius:50%;
-      border:5px solid rgba(0,0,0,0.06);
-      border-top-color: var(--accent-strong);
-      animation: spin 0.9s linear infinite;
-      margin: 10px auto;
-      display: none;
-    }
-    @keyframes spin { to { transform: rotate(360deg);} }
+  /* loader */
+  .loader {
+    width:42px; height:42px; border-radius:50%;
+    border:5px solid rgba(0,0,0,0.06); border-top-color:var(--accent-strong);
+    animation: spin 0.95s linear infinite; margin: 10px auto; display:none;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
 
-    /* ---------------------------
-       Right column (history)
-       --------------------------- */
-    .right {
-      display:flex;
-      flex-direction: column;
-      gap: 12px;
-      min-height: 220px;
-    }
+  /* =========================
+     Right area: history
+     ========================= */
+  .history-controls {
+    display:flex; gap:8px; align-items:center; margin-bottom:8px;
+  }
+  .search {
+    flex:1; padding:10px 12px; border-radius:8px; border:1px solid rgba(0,0,0,0.06); background:white;
+  }
+  .history-list {
+    padding:8px; border-radius:8px; background:#fff; border:1px solid rgba(0,0,0,0.04); max-height:520px; overflow:auto;
+  }
 
-    .history-controls {
-      display:flex;
-      gap: 8px;
-      align-items:center;
-    }
+  .history-item {
+    display:flex; gap:8px; align-items:center; justify-content:space-between;
+    padding:10px; border-radius:8px; border:1px solid rgba(0,0,0,0.03); margin-bottom:8px; background:#fff;
+  }
+  .history-meta { font-weight:700; color:#111; margin-bottom:6px; }
+  .history-sub { color:var(--muted); font-size:13px; word-break:break-word; }
 
-    .history-controls input[type="search"]{
-      flex: 1;
-      padding: 10px 12px;
-      border-radius: 8px;
-      border: 1px solid rgba(0,0,0,0.06);
-      background: white;
-      font-size: 14px;
-    }
+  .history-actions { display:flex; gap:8px; align-items:center; }
 
-    .history-list {
-      margin-top: 6px;
-      padding: 8px;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.9);
-      border: 1px solid rgba(0,0,0,0.06);
-      max-height: 480px;
-      overflow-y: auto;
-    }
+  /* footer */
+  footer { grid-column: 1 / -1; margin-top:8px; text-align:center; font-weight:700; color:#333; }
 
-    .history-item {
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      gap: 8px;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid rgba(0,0,0,0.04);
-      margin-bottom: 8px;
-      background: #fff;
-    }
-
-    .history-item .left {
-      flex: 1 1 auto;
-      min-width: 0;
-    }
-    .history-item .left .meta {
-      font-weight: 700;
-      color: #111;
-      margin-bottom: 6px;
-      word-break: break-word;
-    }
-    .history-item .left .sub {
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .history-actions {
-      display:flex;
-      gap: 8px;
-      align-items:center;
-    }
-
-    .btn-small {
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: 1px solid rgba(0,0,0,0.06);
-      background: #f5f5f5;
-      cursor: pointer;
-      font-size: 13px;
-      color: #111;
-    }
-
-    /* footer */
-    footer {
-      margin-top: 18px;
-      font-weight: 800;
-      text-align:center;
-      color: rgba(0,0,0,0.85);
-    }
-
-    /* responsive tweaks for very small screens */
-    @media(max-width:460px){
-      .input-row input[type="text"]{ flex-basis: 100%; }
-      .small-btn{ width:34px; height:34px; }
-      .page { padding: 8px; }
-      .page .card { padding: 12px; }
-    }
-
-    /* extra spacing so long code lines in editor remain readable */
-    pre { white-space: pre-wrap; word-break: break-word; }
-  </style>
+  /* small screens */
+  @media(max-width:520px){
+    .field { flex-direction:column; align-items:flex-start; gap:6px; }
+    .label { min-width:0; }
+    .input { width:100%; }
+    .controls { width:100%; }
+    .page { padding:8px; }
+  }
+</style>
 </head>
 <body>
-  <!-- ===========================
-       PAGE WRAPPER
-       =========================== -->
-  <main class="page" role="main" aria-labelledby="mainTitle">
-    <!-- LEFT: Code input + result -->
-    <section class="card left" aria-labelledby="leftTitle">
-      <div class="header">
-        <div>
-          <div class="title" id="leftTitle">🎁 Nhập Mã</div>
-          <div class="subtitle">Nhập mã theo dạng <code>HOANGLAM_xxxx</code></div>
-        </div>
-        <div aria-hidden="true">
-          <!-- space for icon/logo if needed -->
-        </div>
+
+<main class="page" role="main" aria-labelledby="mainTitle">
+  <!-- LEFT -->
+  <section class="card left" aria-labelledby="leftTitle">
+    <div class="header">
+      <div>
+        <h1 id="leftTitle">🎁 Nhập mã nhận tài khoản</h1>
+        <div class="sub">Nhập mã theo mẫu <code>HOANGLAM_xxxx</code> (không phân biệt hoa/thường)</div>
+      </div>
+      <div style="text-align:right;">
+        <!-- small help or brand -->
+        <div class="small">Giveaway System</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <input id="codeInput" class="input" type="text" placeholder="VD: HOANGLAM_3392ijdju2ns" aria-label="Nhập mã" />
+      <button id="redeemBtn" class="btn" aria-label="Nhận ngay">Nhận ngay</button>
+      <button id="clearBtn" class="btn ghost" aria-label="Xóa ô nhập">Xóa</button>
+    </div>
+
+    <div id="loader" class="loader" role="status" aria-live="polite" aria-hidden="true"></div>
+
+    <div id="result" class="result-card" role="status" aria-live="polite">
+      <div class="field">
+        <div class="label">Tài khoản</div>
+        <div class="value" id="username">—</div>
+        <button id="copyUser" class="icon-btn" title="Copy username" aria-label="Sao chép username">📋</button>
       </div>
 
-      <!-- Input row -->
-      <div class="input-row" role="form" aria-label="Form nhập mã">
-        <input id="codeInput" type="text" inputmode="latin" placeholder="VD: HOANGLAM_3392ijdju2ns" aria-label="Nhập mã" />
-        <button id="redeemBtn" class="btn" aria-label="Nhận ngay">Nhận ngay</button>
-        <button id="clearFieldsBtn" class="btn ghost" title="Xóa trường nhập">Xóa</button>
+      <div class="field">
+        <div class="label">Mật khẩu</div>
+        <div class="value" id="password" style="letter-spacing:2px;">••••••••</div>
+        <button id="togglePass" class="icon-btn" title="Hiện/ẩn mật khẩu" aria-label="Hiện ẩn mật khẩu">👁</button>
+        <button id="copyPass" class="icon-btn" title="Copy password" aria-label="Sao chép mật khẩu">📋</button>
       </div>
 
-      <!-- Loader -->
-      <div id="loader" class="loader" role="status" aria-hidden="true" aria-live="polite">
-        <span class="visually-hidden">Đang kiểm tra mã…</span>
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
+        <button id="noteBtn" class="btn ghost" title="Ghi chú / gửi qua Gmail">Ghi chú</button>
+        <button id="scrollHistBtn" class="btn ghost">Mở lịch sử</button>
       </div>
+    </div>
 
-      <!-- Result area -->
-      <div id="resultPanel" class="result-panel" aria-live="polite">
-        <div id="resultBox" class="result-inner" style="display:none;" role="status" aria-label="Kết quả tài khoản">
-          <div class="field">
-            <div class="field-label">Tài khoản:</div>
-            <div class="field-value" id="usernameVal">—</div>
-            <button class="small-btn" id="copyUserBtn" title="Sao chép username" aria-label="Sao chép username">📋</button>
-          </div>
+    <div style="margin-top:12px; color:var(--muted); font-size:13px;">
+      Lưu ý: dữ liệu được lưu trên trình duyệt (localStorage). Muốn an toàn hơn cần backend.
+    </div>
+  </section>
 
-          <div class="field">
-            <div class="field-label">Mật khẩu:</div>
-
-            <!-- password is displayed masked by default -->
-            <div class="field-value" id="passwordVal" style="letter-spacing: 3px;">••••••••</div>
-
-            <!-- eye to toggle visibility -->
-            <button class="small-btn" id="togglePassBtn" title="Hiện/ẩn mật khẩu" aria-label="Hiện hoặc ẩn mật khẩu">👁</button>
-
-            <!-- copy password actually uses the real value in data attribute -->
-            <button class="small-btn" id="copyPassBtn" title="Sao chép mật khẩu" aria-label="Sao chép mật khẩu">📋</button>
-          </div>
-
-          <!-- extra controls -->
-          <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px;">
-            <button id="addNoteBtn" class="btn ghost" title="Ghi chú (tạm chức năng demo)" aria-label="Ghi chú">Ghi chú</button>
-            <button id="openHistoryBtn" class="btn ghost" title="Mở lịch sử" aria-label="Mở lịch sử">Mở lịch sử</button>
-          </div>
-        </div>
+  <!-- RIGHT: History -->
+  <aside class="card right" aria-labelledby="rightTitle">
+    <div class="header">
+      <div>
+        <h1 id="rightTitle">Lịch sử đã nhận</h1>
+        <div class="sub">Danh sách mã đã được nhập (mới nhất ở trên)</div>
       </div>
-
-      <!-- A small help block -->
-      <div style="margin-top:12px;color:var(--muted);font-size:13px;">
-        Ghi chú: mã được so khớp không phân biệt hoa/thường. Lịch sử được lưu trên trình duyệt và đồng bộ giữa các tab.
+      <div style="display:flex; gap:8px;">
+        <button id="exportBtn" class="btn ghost" title="Tải file TXT">📁 Xuất TXT</button>
+        <button id="clearHistoryBtn" class="btn warn" title="Xóa toàn bộ">XÓA</button>
       </div>
-    </section>
+    </div>
 
-    <!-- RIGHT: History / Controls -->
-    <aside class="card right" aria-labelledby="rightTitle">
-      <div class="header">
-        <div>
-          <div class="title" id="rightTitle">Lịch sử đã nhận</div>
-          <div class="subtitle">Danh sách mã và tài khoản đã hiển thị</div>
-        </div>
+    <div class="history-controls">
+      <input id="searchInput" class="search" type="search" placeholder="Tìm username, code, thời gian..." aria-label="Tìm lịch sử" />
+    </div>
 
-        <!-- place for quick action -->
-        <div style="display:flex;gap:8px;">
-          <button id="exportBtn" class="btn ghost" title="Tải file TXT">📁 Xuất TXT</button>
-          <button id="clearHistoryBtn" class="btn warn" title="Xóa toàn bộ lịch sử">XÓA</button>
-        </div>
+    <div id="historyList" class="history-list" role="list" aria-live="polite">
+      <!-- history items injected here -->
+    </div>
+
+    <div style="margin-top:10px; color:var(--muted); font-size:13px;">
+      Vận hành bởi <strong>Phan Hoàng Lâm</strong>
+    </div>
+  </aside>
+
+  <!-- footer -->
+  <footer class="card">
+    <div>✨ Website được làm bởi <strong>Phan Hoàng Lâm</strong> ✨</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:6px;">Bạn có thể xuất file TXT để lưu trữ hoặc gửi ghi chú qua email.</div>
+  </footer>
+</main>
+
+<!-- Modal: Note / Send Email -->
+<div id="noteModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); align-items:center; justify-content:center; z-index:9999;">
+  <div style="width:100%; max-width:520px; background:#fff; border-radius:12px; padding:18px; box-shadow:var(--shadow);">
+    <h2 style="margin:0 0 8px 0;">Gửi Ghi chú qua Email</h2>
+    <div style="color:var(--muted); font-size:13px; margin-bottom:12px;">Nội dung sẽ được gửi tới <strong>hoangquanphan1206@gmail.com</strong>. (Giới hạn 3 lần / 10 phút để tránh spam.)</div>
+
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <input id="noteName" placeholder="Tên (tùy chọn)" style="padding:10px; border-radius:8px; border:1px solid #ddd;" />
+      <input id="noteEmail" placeholder="Email người gửi (tùy chọn)" style="padding:10px; border-radius:8px; border:1px solid #ddd;" />
+      <textarea id="noteMessage" placeholder="Viết ghi chú ở đây..." rows="6" style="padding:10px; border-radius:8px; border:1px solid #ddd;"></textarea>
+
+      <div style="display:flex; gap:8px; justify-content:flex-end;">
+        <button id="noteCancel" class="btn ghost">Hủy</button>
+        <button id="noteSend" class="btn">Gửi</button>
       </div>
+    </div>
+  </div>
+</div>
 
-      <!-- search -->
-      <div class="history-controls" role="search" aria-label="Tìm lịch sử">
-        <input id="searchInput" type="search" placeholder="Tìm theo username, code..." aria-label="Tìm lịch sử">
-      </div>
+<!-- ==========================
+     SCRIPT: logic & EmailJS
+     ========================== -->
+<script>
+/* ============================
+   CONFIG
+   - Replace EmailJS IDs with your own values BEFORE using send feature
+   ============================ */
 
-      <!-- list -->
-      <div id="historyList" class="history-list" role="list" aria-label="Danh sách lịch sử">
-        <!-- items injected here -->
-      </div>
+// EmailJS config (REPLACE with your info from https://dashboard.emailjs.com)
+const EMAILJS_SERVICE_ID   = 'YOUR_EMAILJS_SERVICE_ID';   // e.g., 'service_xxx'
+const EMAILJS_TEMPLATE_ID  = 'YOUR_EMAILJS_TEMPLATE_ID';  // e.g., 'template_yyy'
+const EMAILJS_PUBLIC_KEY   = 'YOUR_EMAILJS_PUBLIC_KEY';   // e.g., 'user_zzzz'
 
-      <!-- bottom info -->
-      <div style="margin-top:12px;color:var(--muted);font-size:13px;">
-        Vận hành bởi <strong>Phan Hoàng Lâm</strong>
-      </div>
-    </aside>
+// The destination email used in template (in case you use template param)
+const TO_EMAIL = 'hoangquanphan1206@gmail.com';
 
-    <!-- Footer -->
-    <footer class="card" style="grid-column: 1 / -1;">
-      <div style="display:flex;flex-direction:column;gap:6px;align-items:center;">
-        <div style="font-weight:800;">✨ Website được làm bởi Phan Hoàng Lâm ✨</div>
-        <div style="font-size:13px;color:var(--muted);">Lưu ý: dữ liệu chỉ được lưu trên trình duyệt, không gửi server.</div>
-      </div>
-    </footer>
-  </main>
+// Sending rate limits: protect from spam (client-side)
+const SEND_LIMIT_MAX = 3;
+const SEND_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
 
-  <!-- ===========================
-       JAVASCRIPT - FUNCTIONALITY
-       ===========================
-       - Clear separation: config, storage, UI helpers, actions, event bindings
-       - Many comments so bạn dễ hiểu & chỉnh sửa
-  -->
-  <script>
-    /**********************************************************************
-     * CONFIG
-     * - ACCOUNTS: list of valid codes -> username/password mapping
-     *   NOTE: keys are stored in uppercase for case-insensitive comparison
-     *********************************************************************/
-    const ACCOUNTS = {
-      "HOANGLAM_3392IJDJU2NS": { username: "MariotClot", password: "NAMHA123" },
-      "HOANGLAM_A7K3M9ZQ":     { username: "LaiT1445",   password: "NAMHA123" },
-      "HOANGLAM_Q8Z2P5LM":     { username: "MaMaimn2",   password: "NAMHA123" },
-      "HOANGLAM_R4T6W1BX":     { username: "MaMaBay321", password: "NAMHA123" },
-      "HOANGLAM_YU72BF9K":     { username: "KatuRuler9x",password: "NAMHA123" },
-      "HOANGLAM_12XK9VRC":     { username: "Coconutne89",password: "NAMHA123" }
-    };
+/* ============================
+   ACCOUNTS data
+   - keys stored uppercase (case-insensitive match)
+   - change/add as needed
+   ============================ */
+const ACCOUNTS = {
+  "HOANGLAM_3392IJDJU2NS": { username: "MariotClot", password: "NAMHA123" },
+  "HOANGLAM_A7K3M9ZQ":     { username: "LaiT1445",   password: "NAMHA123" },
+  "HOANGLAM_Q8Z2P5LM":     { username: "MaMaimn2",   password: "NAMHA123" },
+  "HOANGLAM_R4T6W1BX":     { username: "MaMaBay321", password: "NAMHA123" },
+  "HOANGLAM_YU72BF9K":     { username: "KatuRuler9x",password: "NAMHA123" },
+  "HOANGLAM_12XK9VRC":     { username: "Coconutne89",password: "NAMHA123" }
+};
 
-    /* Storage keys */
-    const STORAGE_HISTORY_KEY = 'giveaway_history_v2';
-    const STORAGE_THEME_KEY = 'giveaway_theme_v2'; // not used but reserved for future
+/* ============================
+   STORAGE KEYS
+   ============================ */
+const STORAGE_HISTORY_KEY = 'giveaway_history_v3';
+const STORAGE_SEND_LOG_KEY = 'giveaway_sendlog_v1'; // track send times for rate limit
 
-    /* DOM references (cache) */
-    const dom = {
-      codeInput: document.getElementById('codeInput'),
-      redeemBtn: document.getElementById('redeemBtn'),
-      clearFieldsBtn: document.getElementById('clearFieldsBtn'),
-      loader: document.getElementById('loader'),
-      resultBox: document.getElementById('resultBox'),
-      usernameVal: document.getElementById('usernameVal'),
-      passwordVal: document.getElementById('passwordVal'),
-      copyUserBtn: document.getElementById('copyUserBtn'),
-      copyPassBtn: document.getElementById('copyPassBtn'),
-      togglePassBtn: document.getElementById('togglePassBtn'),
-      addNoteBtn: document.getElementById('addNoteBtn'),
-      openHistoryBtn: document.getElementById('openHistoryBtn'),
+/* ============================
+   DOM elements
+   ============================ */
+const dom = {
+  codeInput: document.getElementById('codeInput'),
+  redeemBtn: document.getElementById('redeemBtn'),
+  clearBtn: document.getElementById('clearBtn'),
+  loader: document.getElementById('loader'),
+  resultCard: document.getElementById('result'),
+  usernameEl: document.getElementById('username'),
+  passwordEl: document.getElementById('password'),
+  copyUser: document.getElementById('copyUser'),
+  copyPass: document.getElementById('copyPass'),
+  togglePass: document.getElementById('togglePass'),
 
-      // history
-      searchInput: document.getElementById('searchInput'),
-      historyList: document.getElementById('historyList'),
-      exportBtn: document.getElementById('exportBtn'),
-      clearHistoryBtn: document.getElementById('clearHistoryBtn')
-    };
+  // history
+  searchInput: document.getElementById('searchInput'),
+  historyList: document.getElementById('historyList'),
+  exportBtn: document.getElementById('exportBtn'),
+  clearHistoryBtn: document.getElementById('clearHistoryBtn'),
 
-    /**********************************************************************
-     * State
-     *********************************************************************/
-    let state = {
-      shownPassword: false, // whether password in result is visible
-      current: { username: '', password: '', code: '' }, // currently displayed account
-      history: [] // array of { time, code, username, password }
-    };
+  // modal / note
+  noteBtn: document.getElementById('noteBtn'),
+  noteModal: document.getElementById('noteModal'),
+  noteName: document.getElementById('noteName'),
+  noteEmail: document.getElementById('noteEmail'),
+  noteMessage: document.getElementById('noteMessage'),
+  noteCancel: document.getElementById('noteCancel'),
+  noteSend: document.getElementById('noteSend'),
 
-    /**********************************************************************
-     * STORAGE HELPERS
-     *********************************************************************/
-    function loadHistoryFromStorage(){
-      try {
-        const raw = localStorage.getItem(STORAGE_HISTORY_KEY);
-        if(!raw) return [];
-        const parsed = JSON.parse(raw);
-        if(Array.isArray(parsed)) return parsed;
-        return [];
-      } catch(err) {
-        console.warn('Failed to load history:', err);
-        return [];
-      }
-    }
+  scrollHistBtn: document.getElementById('scrollHistBtn')
+};
 
-    function saveHistoryToStorage(historyArr){
-      try {
-        localStorage.setItem(STORAGE_HISTORY_KEY, JSON.stringify(historyArr));
-      } catch(err) {
-        console.warn('Failed to save history:', err);
-      }
-    }
+/* ============================
+   App state
+   ============================ */
+let state = {
+  current: { code:'', username:'', password:'' }, // currently shown
+  passwordShown: false,
+  history: [] // array of { time, code, username, password }
+};
 
-    /**********************************************************************
-     * UTILITIES
-     *********************************************************************/
-    function toKey(txt){
-      if(!txt) return '';
-      return String(txt).trim().toUpperCase();
-    }
+/* ============================
+   Helpers: storage load/save
+   ============================ */
+function loadHistory(){
+  try {
+    const raw = localStorage.getItem(STORAGE_HISTORY_KEY);
+    if(!raw) return [];
+    const arr = JSON.parse(raw);
+    if(Array.isArray(arr)) return arr;
+    return [];
+  } catch(e){
+    console.warn('loadHistory error', e);
+    return [];
+  }
+}
+function saveHistory(arr){
+  try {
+    localStorage.setItem(STORAGE_HISTORY_KEY, JSON.stringify(arr));
+  } catch(e){
+    console.warn('saveHistory error', e);
+  }
+}
 
-    function nowStr(){
-      return new Date().toLocaleString();
-    }
+/* send log (timestamps) for rate limit */
+function loadSendLog(){
+  try {
+    const raw = localStorage.getItem(STORAGE_SEND_LOG_KEY);
+    if(!raw) return [];
+    const arr = JSON.parse(raw);
+    if(Array.isArray(arr)) return arr;
+    return [];
+  } catch(e){ return []; }
+}
+function saveSendLog(arr){
+  try { localStorage.setItem(STORAGE_SEND_LOG_KEY, JSON.stringify(arr)); } catch(e){ }
+}
+function addSendTimestamp(){
+  const arr = loadSendLog();
+  arr.push(Date.now());
+  // keep last few
+  if(arr.length > 100) arr.splice(0, arr.length - 100);
+  saveSendLog(arr);
+}
+function countSendWithinWindow(){
+  const arr = loadSendLog();
+  const cutoff = Date.now() - SEND_LIMIT_WINDOW_MS;
+  return arr.filter(ts => ts >= cutoff).length;
+}
 
-    async function copyToClipboard(text){
-      try {
-        await navigator.clipboard.writeText(String(text));
-        showToast('Đã sao chép vào clipboard');
-        return true;
-      } catch(e){
-        // fallback older browsers
-        try {
-          const ta = document.createElement('textarea');
-          ta.value = String(text);
-          document.body.appendChild(ta);
-          ta.select();
-          document.execCommand('copy');
-          ta.remove();
-          showToast('Đã sao chép vào clipboard');
-          return true;
-        } catch(e2) {
-          showToast('Không thể sao chép');
-          return false;
-        }
-      }
-    }
+/* ============================
+   UI helpers
+   ============================ */
+function showLoader(show){
+  dom.loader.style.display = show ? 'block' : 'none';
+}
+function showResult(show){
+  dom.resultCard.style.display = show ? 'block' : 'none';
+}
+function maskPassword(p){
+  if(!p) return '—';
+  const len = Math.max(4, Math.min(6, p.length));
+  return '*'.repeat(len) + (p.length > len ? '...' : '');
+}
+function nowStr(){
+  return new Date().toLocaleString();
+}
 
-    /* toast small messages */
-    function showToast(msg, timeout=1200){
-      // simple approach: create ephemeral element
-      const t = document.createElement('div');
-      t.textContent = msg;
-      t.style.position = 'fixed';
-      t.style.right = '18px';
-      t.style.top = '18px';
-      t.style.zIndex = 9999;
-      t.style.background = 'rgba(0,0,0,0.8)';
-      t.style.color = '#fff';
-      t.style.padding = '8px 12px';
-      t.style.borderRadius = '8px';
-      t.style.fontWeight = 700;
-      t.style.fontSize = '13px';
-      document.body.appendChild(t);
-      setTimeout(()=> { t.style.opacity = '0'; t.style.transition = 'opacity .3s'; }, timeout - 280);
-      setTimeout(()=> { t.remove(); }, timeout);
-    }
+/* ============================
+   Render history (list)
+   ============================ */
+function renderHistory(){
+  const arr = state.history || [];
+  const q = (dom.searchInput.value || '').toLowerCase().trim();
+  dom.historyList.innerHTML = '';
 
-    /**********************************************************************
-     * RENDER HISTORY LIST
-     * - include per-item actions (show/hide password, copy, delete)
-     * - supports search filter
-     *********************************************************************/
-    function renderHistoryList(){
-      const list = state.history || [];
-      const q = (dom.searchInput.value || '').toLowerCase().trim();
+  if(arr.length === 0){
+    const p = document.createElement('div');
+    p.textContent = 'Chưa có lịch sử';
+    p.style.color = 'var(--muted)';
+    p.style.padding = '12px';
+    dom.historyList.appendChild(p);
+    return;
+  }
 
-      // clear
-      dom.historyList.innerHTML = '';
+  arr.forEach((entry, idx) => {
+    // simple search filter
+    const serial = `${entry.time} ${entry.code} ${entry.username} ${entry.password}`.toLowerCase();
+    if(q && !serial.includes(q)) return;
 
-      if(list.length === 0){
-        const p = document.createElement('div');
-        p.style.padding = '12px';
-        p.style.color = 'var(--muted)';
-        p.textContent = 'Chưa có lịch sử';
-        dom.historyList.appendChild(p);
-        return;
-      }
+    const item = document.createElement('div');
+    item.className = 'history-item';
 
-      // iterate & create items
-      list.forEach((entry, idx) => {
-        // search filter
-        const serialized = `${entry.time} ${entry.code} ${entry.username} ${entry.password}`.toLowerCase();
-        if(q && !serialized.includes(q)) return;
+    const left = document.createElement('div');
+    left.style.minWidth = '0';
+    left.className = 'history-left';
 
-        const item = document.createElement('div');
-        item.className = 'history-item';
-        item.setAttribute('role', 'listitem');
+    const meta = document.createElement('div');
+    meta.className = 'history-meta';
+    meta.textContent = `${entry.time} — ${entry.code}`;
 
-        // left meta
-        const left = document.createElement('div');
-        left.className = 'left';
+    const sub = document.createElement('div');
+    sub.className = 'history-sub';
+    sub.textContent = `${entry.username}  |  Pass: ${maskPassword(entry.password)}`;
 
-        const meta = document.createElement('div');
-        meta.className = 'meta';
-        meta.textContent = `${entry.time} — ${entry.code}`;
+    left.appendChild(meta);
+    left.appendChild(sub);
 
-        const sub = document.createElement('div');
-        sub.className = 'sub';
-        // mask the password in list initially
-        const masked = maskPassword(entry.password);
-        sub.textContent = `${entry.username}  |  Pass: ${masked}`;
+    const actions = document.createElement('div');
+    actions.className = 'history-actions';
 
-        left.appendChild(meta);
-        left.appendChild(sub);
-
-        // right actions
-        const actions = document.createElement('div');
-        actions.className = 'history-actions';
-
-        // show/hide button
-        const showBtn = document.createElement('button');
-        showBtn.className = 'btn-small';
-        showBtn.title = 'Hiện/Ẩn mật khẩu';
-        showBtn.textContent = 'HIỆN';
-        showBtn.addEventListener('click', () => {
-          if(showBtn.textContent === 'HIỆN'){
-            sub.textContent = `${entry.username}  |  Pass: ${entry.password}`;
-            showBtn.textContent = 'ẨN';
-          } else {
-            sub.textContent = `${entry.username}  |  Pass: ${maskPassword(entry.password)}`;
-            showBtn.textContent = 'HIỆN';
-          }
-        });
-
-        // copy button (copies username and password)
-        const copyBtn = document.createElement('button');
-        copyBtn.className = 'btn-small';
-        copyBtn.title = 'Copy username & password';
-        copyBtn.textContent = 'COPY';
-        copyBtn.addEventListener('click', async () => {
-          await copyToClipboard(`${entry.username}\t${entry.password}`);
-        });
-
-        // delete single item
-        const delBtn = document.createElement('button');
-        delBtn.className = 'btn-small';
-        delBtn.style.background = '#ffecec';
-        delBtn.style.borderColor = 'rgba(0,0,0,0.06)';
-        delBtn.textContent = 'XÓA';
-        delBtn.title = 'Xóa mục này';
-        delBtn.addEventListener('click', () => {
-          if(!confirm('Xóa mục này khỏi lịch sử?')) return;
-          removeHistoryAtIndex(idx);
-        });
-
-        actions.appendChild(showBtn);
-        actions.appendChild(copyBtn);
-        actions.appendChild(delBtn);
-
-        item.appendChild(left);
-        item.appendChild(actions);
-
-        dom.historyList.appendChild(item);
-      });
-    }
-
-    function maskPassword(p){
-      if(!p) return '—';
-      const len = Math.max(3, Math.min(6, p.length));
-      return '*'.repeat(len) + (p.length > len ? '...' : '');
-    }
-
-    /**********************************************************************
-     * MUTATION: add/remove history
-     *********************************************************************/
-    function addHistory(entry){
-      // entry = { time, code, username, password }
-      state.history.unshift(entry); // newest first
-      // cap to some reasonable number
-      if(state.history.length > 500) state.history.length = 500;
-      saveHistoryToStorage(state.history);
-      // trigger re-render + storage sync (other tabs will pick up via storage event)
-      renderHistoryList();
-    }
-
-    function removeHistoryAtIndex(idx){
-      // idx corresponds to index in the current state.history
-      if(idx < 0 || idx >= state.history.length) return;
-      state.history.splice(idx, 1);
-      saveHistoryToStorage(state.history);
-      renderHistoryList();
-      // Also notify other tabs by touching localStorage key
-      localStorage.setItem(STORAGE_HISTORY_KEY, JSON.stringify(state.history));
-    }
-
-    function clearAllHistory(){
-      if(!confirm('Xóa toàn bộ lịch sử? Hành động này không thể hoàn tác.')) return;
-      state.history = [];
-      saveHistoryToStorage(state.history);
-      // notify other tabs
-      localStorage.setItem(STORAGE_HISTORY_KEY, JSON.stringify(state.history));
-      renderHistoryList();
-      showToast('Đã xóa toàn bộ lịch sử');
-    }
-
-    /**********************************************************************
-     * ACTION: Redeem code (main flow)
-     * - shows loader
-     * - checks ACCOUNTS (case-insensitive)
-     * - if matched: display, add to history
-     * - else: show error toast
-     *********************************************************************/
-    function redeemCode(){
-      const raw = dom.codeInput.value || '';
-      const key = toKey(raw);
-      if(!key){
-        showToast('Vui lòng nhập mã');
-        return;
-      }
-
-      // show loader
-      dom.loader.style.display = 'block';
-      dom.resultBox.style.display = 'none';
-
-      // simulate small delay to show loader (real app could call server)
-      setTimeout(() => {
-        dom.loader.style.display = 'none';
-        // find entry in ACCOUNTS (keys stored uppercase in config)
-        const matchedKey = Object.keys(ACCOUNTS).find(k => toKey(k) === key);
-        if(!matchedKey){
-          showToast('Mã không hợp lệ');
-          return;
-        }
-
-        const acc = ACCOUNTS[matchedKey];
-        // update state.current
-        state.current = { username: acc.username, password: acc.password, code: matchedKey };
-
-        // show values
-        dom.usernameVal.textContent = acc.username;
-        dom.passwordVal.textContent = maskPassword(acc.password); // masked by default
-        dom.passwordVal.dataset.real = acc.password; // store real password in data attribute
-        state.shownPassword = false;
-        dom.resultBox.style.display = 'block';
-
-        // add to history
-        const entry = {
-          time: nowStr(),
-          code: matchedKey,
-          username: acc.username,
-          password: acc.password
-        };
-        addHistory(entry);
-
-        // clear input
-        dom.codeInput.value = '';
-      }, 850);
-    }
-
-    /**********************************************************************
-     * Toggle result password visibility
-     *********************************************************************/
-    function toggleResultPassword(){
-      const real = dom.passwordVal.dataset.real || '';
-      if(!real) return;
-      if(state.shownPassword){
-        // hide it
-        dom.passwordVal.textContent = maskPassword(real);
-        state.shownPassword = false;
+    // show/hide toggle
+    const showBtn = document.createElement('button');
+    showBtn.className = 'btn ghost';
+    showBtn.textContent = 'HIỆN';
+    showBtn.addEventListener('click', () => {
+      if(showBtn.textContent === 'HIỆN'){
+        sub.textContent = `${entry.username}  |  Pass: ${entry.password}`;
+        showBtn.textContent = 'ẨN';
       } else {
-        dom.passwordVal.textContent = real;
-        state.shownPassword = true;
+        sub.textContent = `${entry.username}  |  Pass: ${maskPassword(entry.password)}`;
+        showBtn.textContent = 'HIỆN';
       }
-    }
-
-    /**********************************************************************
-     * Export history as .txt
-     * - generates a textual content with each line "time — code — username / password"
-     * - downloads as accounthoanglam.txt
-     *********************************************************************/
-    function exportHistoryAsTxt(){
-      const arr = state.history || [];
-      if(arr.length === 0){
-        showToast('Không có lịch sử để xuất');
-        return;
-      }
-      const lines = arr.map(it => `${it.time} — ${it.code} — ${it.username} / ${it.password}`);
-      const content = lines.join('\n');
-      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'accounthoanglam.txt';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-      showToast('Bắt đầu tải accounthoanglam.txt');
-    }
-
-    /**********************************************************************
-     * HANDLE storage event for multi-tab sync
-     *********************************************************************/
-    window.addEventListener('storage', (ev) => {
-      // when STORAGE_HISTORY_KEY changes, reload history from localStorage
-      if(ev.key === STORAGE_HISTORY_KEY){
-        state.history = loadHistoryFromStorage();
-        renderHistoryList();
-      }
-      // theme key reserved for future
     });
 
-    /**********************************************************************
-     * EVENT BINDINGS
-     *********************************************************************/
-    function bindUI(){
-      // redeem on click & Enter key
-      dom.redeemBtn.addEventListener('click', redeemCode);
-      dom.codeInput.addEventListener('keydown', (e) => {
-        if(e.key === 'Enter') redeemCode();
-      });
+    // copy
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'btn ghost';
+    copyBtn.textContent = 'COPY';
+    copyBtn.title = 'Copy username và password';
+    copyBtn.addEventListener('click', async () => {
+      await copyToClipboard(`${entry.username}\t${entry.password}`);
+    });
 
-      // clear fields button
-      dom.clearFieldsBtn.addEventListener('click', () => {
-        dom.codeInput.value = '';
-        dom.codeInput.focus();
-      });
+    // delete
+    const delBtn = document.createElement('button');
+    delBtn.className = 'btn warn';
+    delBtn.textContent = 'XÓA';
+    delBtn.addEventListener('click', () => {
+      if(!confirm('Xóa mục này khỏi lịch sử?')) return;
+      state.history.splice(idx, 1);
+      saveHistory(state.history);
+      // write to localStorage (this will trigger storage event in other tabs too)
+      localStorage.setItem(STORAGE_HISTORY_KEY, JSON.stringify(state.history));
+      renderHistory();
+    });
 
-      // copy buttons
-      dom.copyUserBtn.addEventListener('click', () => {
-        const t = dom.usernameVal.textContent || '';
-        if(t && t !== '—') copyToClipboard(t);
-      });
-      dom.copyPassBtn.addEventListener('click', () => {
-        const real = dom.passwordVal.dataset.real || '';
-        if(real) copyToClipboard(real);
-      });
+    actions.appendChild(showBtn);
+    actions.appendChild(copyBtn);
+    actions.appendChild(delBtn);
 
-      // toggle password in result
-      dom.togglePassBtn.addEventListener('click', toggleResultPassword);
+    item.appendChild(left);
+    item.appendChild(actions);
 
-      // open history (scroll into view)
-      dom.openHistoryBtn.addEventListener('click', () => {
-        dom.historyList.scrollIntoView({ behavior: 'smooth' });
-      });
+    dom.historyList.appendChild(item);
+  });
+}
 
-      // add note (demo)
-      dom.addNoteBtn.addEventListener('click', () => {
-        const note = prompt('Ghi chú nhanh (tuỳ chọn):');
-        if(note) showToast('Ghi chú: ' + note);
-      });
-
-      // search filter
-      dom.searchInput.addEventListener('input', () => {
-        renderHistoryList();
-      });
-
-      // export & clear history
-      dom.exportBtn.addEventListener('click', exportHistoryAsTxt);
-      dom.clearHistoryBtn.addEventListener('click', clearAllHistory);
+/* ============================
+   Clipboard helper
+   ============================ */
+async function copyToClipboard(text){
+  try {
+    await navigator.clipboard.writeText(String(text));
+    showToast('Đã sao chép vào clipboard');
+    return true;
+  } catch(e){
+    // fallback
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = String(text);
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+      showToast('Đã sao chép vào clipboard');
+      return true;
+    } catch(e2){
+      showToast('Không thể sao chép');
+      return false;
     }
+  }
+}
 
-    /**********************************************************************
-     * INITIALIZATION
-     *********************************************************************/
-    function init(){
-      // load persisted history
-      state.history = loadHistoryFromStorage();
-      // render initially
-      renderHistoryList();
-      // bind events
-      bindUI();
-      // focus input
-      dom.codeInput.focus();
+/* ============================
+   Redeem logic
+   ============================ */
+function redeem(){
+  const raw = (dom.codeInput.value || '').trim();
+  const key = raw.toUpperCase();
+  if(!key){
+    showToast('Vui lòng nhập mã');
+    return;
+  }
+
+  showLoader(true);
+  showResult(false);
+
+  // small simulated delay
+  setTimeout(() => {
+    showLoader(false);
+    // find account
+    const matched = Object.keys(ACCOUNTS).find(k => k.toUpperCase() === key);
+    if(!matched){
+      showToast('Mã không hợp lệ');
+      return;
     }
+    const acc = ACCOUNTS[matched];
+    // update state
+    state.current = { code: matched, username: acc.username, password: acc.password };
+    // show in UI masked
+    dom.usernameEl.textContent = acc.username;
+    dom.passwordEl.textContent = maskPassword(acc.password);
+    dom.passwordEl.dataset.real = acc.password;
+    state.passwordShown = false;
+    showResult(true);
+    // add to history (newest first)
+    const entry = { time: nowStr(), code: matched, username: acc.username, password: acc.password };
+    state.history.unshift(entry);
+    if(state.history.length > 1000) state.history.length = 1000;
+    saveHistory(state.history);
+    // write to localStorage to notify other tabs (explicit write)
+    localStorage.setItem(STORAGE_HISTORY_KEY, JSON.stringify(state.history));
+    renderHistory();
+    dom.codeInput.value = '';
+  }, 750);
+}
 
-    // run init
-    init();
+/* ============================
+   Toggle password visibility in result
+   ============================ */
+function togglePasswordResult(){
+  const real = dom.passwordEl.dataset.real || '';
+  if(!real) return;
+  if(state.passwordShown){
+    dom.passwordEl.textContent = maskPassword(real);
+    state.passwordShown = false;
+  } else {
+    dom.passwordEl.textContent = real;
+    state.passwordShown = true;
+  }
+}
 
-    /**********************************************************************
-     * End of script
-     *********************************************************************/
-  </script>
+/* ============================
+   Export TXT
+   ============================ */
+function exportTxt(){
+  if(!state.history || state.history.length === 0){
+    showToast('Không có lịch sử để xuất');
+    return;
+  }
+  const lines = state.history.map(it => `${it.time} — ${it.code} — ${it.username} / ${it.password}`);
+  const content = lines.join('\n');
+  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'accounthoanglam.txt';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  showToast('Bắt đầu tải accounthoanglam.txt');
+}
+
+/* ============================
+   Modal: show / hide
+   ============================ */
+function openNoteModal(){
+  // quick rate-limit check
+  const sendCount = countSendWithinWindow();
+  if(sendCount >= SEND_LIMIT_MAX){
+    showToast(`Giới hạn gửi: ${SEND_LIMIT_MAX} lần / ${(SEND_LIMIT_WINDOW_MS/60000)} phút`);
+    return;
+  }
+  dom.noteModal.style.display = 'flex';
+  dom.noteName.value = '';
+  dom.noteEmail.value = '';
+  dom.noteMessage.value = `Mã: ${state.current.code || '[chưa có]'}\nUsername: ${state.current.username || ''}\n`; // pre-fill with current
+}
+function closeNoteModal(){
+  dom.noteModal.style.display = 'none';
+}
+
+/* ============================
+   EmailJS send (client-side)
+   - requires user to set EMAILJS_* config at top
+   - uses fetch to EmailJS REST API as fallback if SDK not loaded
+   ============================ */
+async function sendNoteEmail(){
+  const name = (dom.noteName.value || '').trim();
+  const fromEmail = (dom.noteEmail.value || '').trim();
+  const message = (dom.noteMessage.value || '').trim();
+
+  if(!message){
+    alert('Vui lòng nhập nội dung gửi.');
+    return;
+  }
+
+  // check rate limit
+  const count = countSendWithinWindow();
+  if(count >= SEND_LIMIT_MAX){
+    alert(`Đã vượt giới hạn gửi (${SEND_LIMIT_MAX} lần trong ${SEND_LIMIT_WINDOW_MS/60000} phút). Vui lòng thử lại sau.`);
+    return;
+  }
+
+  // requires EmailJS config
+  if(!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY ||
+     EMAILJS_SERVICE_ID.startsWith('YOUR') || EMAILJS_TEMPLATE_ID.startsWith('YOUR') || EMAILJS_PUBLIC_KEY.startsWith('YOUR')){
+    alert('Tính năng gửi email chưa được cấu hình. Vui lòng cài đặt EmailJS và cập nhật cấu hình trong file.');
+    return;
+  }
+
+  // Prepare template parameters; adapt these names to your EmailJS template variables
+  const templateParams = {
+    to_email: TO_EMAIL,
+    from_name: name || 'Người dùng web',
+    from_email: fromEmail || 'no-reply@example.com',
+    subject: `Ghi chú từ website — ${state.current.code || 'NoCode'}`,
+    message: message,
+    code: state.current.code || '',
+    username: state.current.username || '',
+    password: state.current.password || ''
+  };
+
+  // show "sending" UI
+  dom.noteSend.disabled = true;
+  dom.noteSend.textContent = 'Đang gửi...';
+
+  try{
+    // Use EmailJS REST API endpoint (no dependency)
+    // Docs: https://www.emailjs.com/docs/rest-api/send/
+    const payload = {
+      service_id: EMAILJS_SERVICE_ID,
+      template_id: EMAILJS_TEMPLATE_ID,
+      user_id: EMAILJS_PUBLIC_KEY,
+      template_params: templateParams
+    };
+
+    const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if(res.ok){
+      addSendTimestamp(); // log
+      showToast('Gửi ghi chú thành công');
+      closeNoteModal();
+    } else {
+      const txt = await res.text();
+      console.error('EmailJS send error', res.status, txt);
+      alert('Gửi thất bại. Kiểm tra cấu hình EmailJS (service/template/public key).');
+    }
+  } catch(err){
+    console.error('Send note error', err);
+    alert('Lỗi khi gửi ghi chú. Kiểm tra kết nối mạng và cấu hình.');
+  } finally {
+    dom.noteSend.disabled = false;
+    dom.noteSend.textContent = 'Gửi';
+  }
+}
+
+/* ============================
+   Storage event for multi-tab sync
+   ============================ */
+window.addEventListener('storage', (ev) => {
+  if(ev.key === STORAGE_HISTORY_KEY){
+    state.history = loadHistory();
+    renderHistory();
+  }
+  // send log also could be synced, but not necessary
+});
+
+/* ============================
+   Event bindings
+   ============================ */
+function bindEvents(){
+  dom.redeemBtn.addEventListener('click', redeem);
+  dom.codeInput.addEventListener('keydown', (e) => { if(e.key === 'Enter') redeem(); });
+  dom.clearBtn.addEventListener('click', () => { dom.codeInput.value = ''; dom.codeInput.focus(); });
+
+  dom.copyUser.addEventListener('click', async () => {
+    const t = dom.usernameEl ? dom.usernameEl.textContent : document.getElementById('username').textContent;
+    if(t && t !== '—') await copyToClipboard(t);
+  });
+
+  dom.copyPass.addEventListener('click', async () => {
+    const real = dom.passwordEl ? dom.passwordEl.dataset.real : document.getElementById('password').dataset.real;
+    if(real) await copyToClipboard(real);
+  });
+
+  dom.togglePass.addEventListener('click', togglePasswordResult);
+
+  dom.searchInput.addEventListener('input', renderHistory);
+
+  dom.exportBtn.addEventListener('click', exportTxt);
+  dom.clearHistoryBtn.addEventListener('click', () => {
+    if(!confirm('Bạn có chắc muốn xóa toàn bộ lịch sử?')) return;
+    state.history = [];
+    saveHistory(state.history);
+    localStorage.setItem(STORAGE_HISTORY_KEY, JSON.stringify(state.history));
+    renderHistory();
+  });
+
+  dom.noteBtn.addEventListener('click', openNoteModal);
+  dom.noteCancel.addEventListener('click', closeNoteModal);
+  dom.noteSend.addEventListener('click', sendNoteEmail);
+
+  dom.scrollHistBtn.addEventListener('click', () => {
+    document.getElementById('historyList').scrollIntoView({ behavior:'smooth' });
+  });
+}
+
+/* ============================
+   Init
+   ============================ */
+function init(){
+  state.history = loadHistory();
+  renderHistory();
+  bindEvents();
+  dom.codeInput.focus();
+}
+
+/* start */
+init();
+
+/* ============================
+   Small helper: initial content for EmailJS placeholders
+   - If you prefer to use EmailJS SDK, you can also include their script:
+   <script src="https://cdn.emailjs.com/sdk/3.2.0/email.min.js"></script>
+   emailjs.init('YOUR_PUBLIC_KEY');
+   - But here we used REST API to avoid loading SDK.
+   ============================ */
+
+/* ============================
+   Small utility functions defined earlier but used here
+   ============================ */
+function showToast(msg){
+  const box = document.createElement('div');
+  box.textContent = msg;
+  box.style.position = 'fixed';
+  box.style.right = '18px';
+  box.style.top = '18px';
+  box.style.zIndex = 99999;
+  box.style.background = 'rgba(0,0,0,0.8)';
+  box.style.color = '#fff';
+  box.style.padding = '8px 12px';
+  box.style.borderRadius = '8px';
+  box.style.fontWeight = 700;
+  document.body.appendChild(box);
+  setTimeout(()=> { box.style.opacity = '0'; box.style.transition = 'opacity .3s'; }, 1200);
+  setTimeout(()=> { box.remove(); }, 1500);
+}
+
+/* small util to count sends within window */
+function addSendTimestamp(){
+  addSendTimestampImpl();
+}
+function addSendTimestampImpl(){
+  const arr = loadSendLog();
+  arr.push(Date.now());
+  // keep last 200 timestamps
+  if(arr.length > 200) arr.splice(0, arr.length - 200);
+  saveSendLog(arr);
+}
+function countSendWithinWindow(){
+  const arr = loadSendLog();
+  const cutoff = Date.now() - SEND_LIMIT_WINDOW_MS;
+  return arr.filter(ts => ts >= cutoff).length;
+}
+
+/* load initial send log if missing */
+if(!localStorage.getItem(STORAGE_SEND_LOG_KEY)) localStorage.setItem(STORAGE_SEND_LOG_KEY, JSON.stringify([]));
+
+</script>
 </body>
 </html>
