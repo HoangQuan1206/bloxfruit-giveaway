@@ -1,258 +1,260 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Phan Hoàng Lâm - GiveAway Account</title>
-<style>
-/* ============================
-   RESET & GLOBAL
-============================ */
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
-body{background:#f5f5f5;color:#333;}
-a{text-decoration:none;color:#007bff;}
-a:hover{text-decoration:underline;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phan Hoàng Lâm - GiveAway Account</title>
+  <style>
+    /* ===========================
+       RESET & GLOBAL
+    ============================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      background: #f5f5f5;
+      color: #333;
+    }
+    a {
+      text-decoration: none;
+      color: #007bff;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
 
-/* ============================
-   LAYOUT
-============================ */
-.container{display:flex;flex-wrap:wrap;min-height:100vh;}
-.left-panel, .right-panel{padding:20px;}
-.left-panel{flex:1;min-width:250px;background:#fff;margin:10px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.1);}
-.right-panel{flex:2;min-width:300px;background:#fff;margin:10px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.1);}
+    /* ===========================
+       LAYOUT
+    ============================ */
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      min-height: 100vh;
+    }
+    .left-panel,
+    .right-panel {
+      padding: 20px;
+    }
+    .left-panel {
+      flex: 1;
+      min-width: 250px;
+      background: #fff;
+      margin: 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .right-panel {
+      flex: 2;
+      min-width: 300px;
+      background: #fff;
+      margin: 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
 
-/* ============================
-   INPUTS & BUTTONS
-============================ */
-input[type=text]{width:100%;padding:10px;margin:5px 0 15px 0;border:1px solid #ccc;border-radius:5px;transition:0.3s;}
-input[type=text]:hover{border-color:#007bff;box-shadow:0 0 5px rgba(0,123,255,0.5);}
-input[type=text]:focus{outline:none;border-color:#0056b3;box-shadow:0 0 8px rgba(0,86,179,0.5);}
-button{padding:10px 15px;margin:5px;border:none;border-radius:5px;background:#007bff;color:#fff;cursor:pointer;transition:0.3s;position:relative;}
-button:hover{background:#0056b3;transform:scale(1.05);}
-button[data-tooltip]:hover::after{
-  content: attr(data-tooltip);
-  position: absolute;
-  top:-30px; left:50%;
-  transform:translateX(-50%);
-  background:rgba(0,0,0,0.75); color:#fff;
-  padding:5px 10px; border-radius:5px; font-size:12px;
-  white-space:nowrap; z-index:1000;
-}
-#loader{display:none;margin:10px 0;}
-#result{display:none;padding:10px;margin-top:10px;background:#e7f5ff;border-radius:5px;}
+    /* ===========================
+       INPUTS & BUTTONS
+    ============================ */
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0 15px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      transition: 0.3s;
+    }
+    input[type="text"]:hover {
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #0056b3;
+      box-shadow: 0 0 8px rgba(0, 86, 179, 0.5);
+    }
+    button {
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      background: #007bff;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+      position: relative;
+    }
+    button:hover {
+      background: #0056b3;
+      transform: scale(1.05);
+    }
+    button[data-tooltip]:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.75);
+      color: #fff;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 12px;
+      white-space: nowrap;
+      z-index: 1000;
+    }
+    #loader {
+      display: none;
+      margin: 10px 0;
+    }
+    #result {
+      display: none;
+      padding: 10px;
+      margin-top: 10px;
+      background: #e7f5ff;
+      border-radius: 5px;
+    }
 
-/* ============================
-   HISTORY
-============================ */
-.history-item{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #eee;}
-.history-meta{font-weight:bold;}
-.history-sub{font-size:12px;color:#666;}
+    /* ===========================
+       HISTORY
+    ============================ */
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .history-meta {
+      font-weight: bold;
+    }
+    .history-sub {
+      font-size: 12px;
+      color: #666;
+    }
 
-/* ============================
-   TOAST & CONFETTI
-============================ */
-.toast{position:fixed;top:20px;right:20px;background:#333;color:#fff;padding:10px 15px;border-radius:5px;opacity:0;transition:0.3s;}
-.confetti{position:fixed;top:0;width:8px;height:8px;border-radius:50%;z-index:9999;animation:fall 3s linear forwards;}
-@keyframes fall{0%{transform:translateY(0) rotate(0deg);}100%{transform:translateY(100vh) rotate(360deg);}}
+    /* ===========================
+       TOAST & CONFETTI
+    ============================ */
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #333;
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 5px;
+      opacity: 0;
+      transition: 0.3s;
+    }
+    .confetti {
+      position: fixed;
+      top: 0;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      z-index: 9999;
+      animation: fall 3s linear forwards;
+    }
+    @keyframes fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+      }
+    }
 
-/* ============================
-   DRAGON ANIMATION
-============================ */
-@keyframes jump {
-  0% { transform: translateY(0); }
-  25% { transform: translateY(-20px) rotate(-5deg); }
-  50% { transform: translateY(0) rotate(0deg); }
-  75% { transform: translateY(-15px) rotate(5deg); }
-  100% { transform: translateY(0); }
-}
-#blackDragon {
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  width:100px;
-  z-index:1000;
-  animation: jump 1s ease-in-out infinite;
-}
-</style>
+    /* ===========================
+       DRAGON ANIMATION
+    ============================ */
+    #blackDragon {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 300px;
+      z-index: 1000;
+      animation: jump 1.5s ease-in-out infinite;
+    }
+    @keyframes jump {
+      0% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+      100% {
+        transform: translateY(0);
+      }
+    }
+  </style>
 </head>
 <body>
-
-<div class="container">
-  <!-- LEFT PANEL -->
-  <div class="left-panel">
-    <h2>Hướng dẫn đăng nhập tài khoản</h2>
-    <p>1. Truy cập vào <strong><a href="https://www.roblox.com/login" target="_blank">Roblox Login</a></strong> để vào trang đăng nhập.</p>
-    <p>2. Nhập <strong>username</strong> và <strong>password</strong> mà bạn nhận được từ việc nhập code ở cột bên phải.</p>
-    <p>3. Nhấn <strong>Login</strong> và làm theo hướng dẫn trên trang.</p>
-    <p>💡 Lưu ý: Bạn có thể mở trang trên <strong>máy tính hoặc điện thoại</strong> đều được.</p>
-    <p>4. Nếu quên mật khẩu, chọn <strong><a href="https://www.roblox.com/login/forgot-password-or-username" target="_blank">Quên mật khẩu</a></strong>.</p>
-  </div>
-
-  <!-- RIGHT PANEL -->
-  <div class="right-panel">
-    <h2>Nhập code nhận tài khoản</h2>
-    <input type="text" id="codeInput" placeholder="Nhập code tại đây" data-tooltip="Nhập mã code của bạn vào đây để nhận tài khoản">
-    <button id="redeemBtn" data-tooltip="Nhấn để lấy tài khoản từ code">Redeem Code</button>
-    <button id="clearBtn" data-tooltip="Xóa code vừa nhập">Clear</button>
-    <div id="loader">Đang xử lý...</div>
-    <div id="result">
-      <p>Username: <span id="username"></span> <button id="copyUser" class="icon-btn" data-tooltip="Copy username">📋</button></p>
-      <p>Password: <span id="password"></span> <button id="copyPass" class="icon-btn" data-tooltip="Copy password">📋</button> <button id="togglePass" class="icon-btn" data-tooltip="Hiện/ẩn password">👁️</button></p>
+  <div class="container">
+    <!-- LEFT PANEL -->
+    <div class="left-panel">
+      <h2>Hướng dẫn đăng nhập tài khoản</h2>
+      <p>1. Truy cập vào <strong><a href="https://www.roblox.com/login" target="_blank">Roblox Login</a></strong> để vào trang đăng nhập.</p>
+      <p>2. Nhập <strong>username</strong> và <strong>password</strong> mà bạn nhận được từ việc nhập code ở cột bên phải.</p>
+      <p>3. Nhấn <strong>Login</strong> và làm theo hướng dẫn trên trang.</p>
+      <p>💡 Lưu ý: Bạn có thể mở trang trên <strong>máy tính hoặc điện thoại</strong> đều được.</p>
+      <p>4. Nếu quên mật khẩu, chọn <strong><a href="https://www.roblox.com/login/forgot-password-or-username" target="_blank">Quên mật khẩu</a></strong>.</p>
     </div>
 
-    <h3>Lịch sử</h3>
-    <input type="text" id="searchInput" placeholder="Tìm kiếm..." data-tooltip="Tìm kiếm trong lịch sử">
-    <div id="historyList"></div>
-    <button id="exportBtn" data-tooltip="Xuất danh sách lịch sử ra file TXT">Xuất TXT</button>
-    <button id="clearHistoryBtn" data-tooltip="Xóa toàn bộ lịch sử">Xóa lịch sử</button>
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+      <h2>Nhập code nhận tài khoản</h2>
+      <input type="text" id="codeInput" placeholder="Nhập code tại đây" data-tooltip="Nhập mã code của bạn vào đây để nhận tài khoản">
+      <button id="redeemBtn" data-tooltip="Nhấn để lấy tài khoản từ code">Redeem Code</button>
+      <button id="clearBtn" data-tooltip="Xóa code vừa nhập">Clear</button>
+      <div id="loader">Đang xử lý...</div>
+      <div id="result">
+        <p>Username: <span id="username"></span> <button id="copyUser" class="icon-btn" data-tooltip="Copy username">📋</button></p>
+        <p>Password: <span id="password"></span> <button id="copyPass" class="icon-btn" data-tooltip="Copy password">📋</button> <button id="togglePass" class="icon-btn" data-tooltip="Hiện/ẩn password">👁️</button></p>
+      </div>
+
+      <h3>Lịch sử</h3>
+      <input type="text" id="searchInput" placeholder="Tìm kiếm..." data-tooltip="Tìm kiếm trong lịch sử">
+      <div id="historyList"></div>
+      <button id="exportBtn" data-tooltip="Xuất danh sách lịch sử ra file TXT">Xuất TXT</button>
+      <button id="clearHistoryBtn" data-tooltip="Xóa toàn bộ lịch sử">Xóa lịch sử</button>
+    </div>
   </div>
-</div>
 
-<!-- DRAGON IMAGE -->
-<img src="https://img-cdn.xemgame.com/2024/01/05/tdc.jpg" alt="Black Dragon" id="blackDragon">
+  <div id="toastContainer"></div>
 
-<div id="toastContainer"></div>
+  <!-- DRAGON IMAGE -->
+  <img src="https://img-cdn.xemgame.com/2024/01/05/tdc.jpg" alt="Black Dragon" id="blackDragon">
 
-<script>
-// ============================
-// DATA
-// ============================
-const ACCOUNTS={
-  "HOANGLAM_3392IJDS": { username:"MariotClot", password:"NAMHA123" }, 
-  "HOANGLAM_A7K3M9ZQ": { username:"LaiT1445", password:"NAMHA123" },
-  "HOANGLAM_Q8Z2P5LM": { username:"MaMaimn2", password:"NAMHA123" },
-  "HOANGLAM_R4T6W1BX": { username:"MaMaBay321", password:"NAMHA123" },
-  "HOANGLAM_YU72BF9K": { username:"KatuRuler9x", password:"NAMHA123" },
-  "HOANGLAM_12XK9VRC": { username:"Coconutne89", password:"NAMHA123" }
-};
+  <script>
+    // ===========================
+    // DATA
+    // ===========================
+    const ACCOUNTS = {
+      "HOANGLAM_3392IJDS": { username: "MariotClot", password: "NAMHA123" },
+      "HOANGLAM_A7K3M9ZQ": { username: "LaiT1445", password: "NAMHA123" },
+      "HOANGLAM_Q8Z2P5LM": { username: "MaMaimn2", password: "NAMHA123" },
+      "HOANGLAM_R4T6W1BX": { username: "MaMaBay321", password: "NAMHA123" },
+      "HOANGLAM_YU72BF9K": { username: "KatuRuler9x", password: "NAMHA123" },
+      "HOANGLAM_12XK9VRC": { username: "Coconutne89", password: "NAMHA123" }
+    };
 
-// ============================
-// DOM ELEMENTS
-// ============================
-const codeInput=document.getElementById('codeInput');
-const redeemBtn=document.getElementById('redeemBtn');
-const clearBtn=document.getElementById('clearBtn');
-const loader=document.getElementById('loader');
-const result=document.getElementById('result');
-const usernameEl=document.getElementById('username');
-const passwordEl=document.getElementById('password');
-const copyUser=document.getElementById('copyUser');
-const copyPass=document.getElementById('copyPass');
-const togglePass=document.getElementById('togglePass');
-const historyList=document.getElementById('historyList');
-const searchInput=document.getElementById('searchInput');
-const exportBtn=document.getElementById('exportBtn');
-const clearHistoryBtn=document.getElementById('clearHistoryBtn');
-const toastContainer=document.getElementById('toastContainer');
+    // ===========================
+    // DOM ELEMENTS
+    // ===========================
+    const codeInput = document.getElementById('codeInput');
+    const redeemBtn = document.getElementById('redeemBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const loader = document.getElementById('loader');
+    const result = document.getElementById('result');
+    const usernameEl = document.getElementById('username');
+    const passwordEl = document.getElementById('password');
+    const copyUser = document.getElementById('copyUser');
+    const copyPass = document.getElementById('copyPass');
+    const togglePass = document.getElementById('togglePass');
 
-let historyData=[];
-
-// ============================
-// HELPER FUNCTIONS
-// ============================
-function showToast(msg,timeout=2000){
-  const toast=document.createElement('div');
-  toast.className='toast';
-  toast.textContent=msg;
-  toastContainer.appendChild(toast);
-  setTimeout(()=>toast.style.opacity=1,50);
-  setTimeout(()=>{toast.style.opacity=0;setTimeout(()=>toast.remove(),300);},timeout);
-}
-
-function createConfetti(){
-  const confetti=document.createElement('div');
-  confetti.className='confetti';
-  confetti.style.left=Math.random()*window.innerWidth+'px';
-  confetti.style.background=`hsl(${Math.random()*360},70%,60%)`;
-  document.body.appendChild(confetti);
-  setTimeout(()=>confetti.remove(),3000);
-}
-
-// ============================
-// REDEEM CODE
-// ============================
-function redeemCode(){
-  const code=codeInput.value.trim().toUpperCase();
-  if(!code){showToast("Chưa nhập mã!"); return;}
-  loader.style.display='block';
-  result.style.display='none';
-  setTimeout(()=>{
-    loader.style.display='none';
-    const acc=ACCOUNTS[code];
-    if(acc){
-      usernameEl.textContent=acc.username;
-      passwordEl.textContent=acc.password.replace(/./g,'•');
-      passwordEl.dataset.real=acc.password;
-      result.style.display='block';
-      showToast("🎉 Lấy thành công!");
-      createConfetti();
-      const now=new Date().toLocaleString();
-      historyData.unshift({code,username:acc.username,password:acc.password,time:now});
-      renderHistory();
-      saveHistory();
-    } else {
-      showToast("❌ Mã không hợp lệ!");
-    }
-  },1000);
-}
-
-// ============================
-// HISTORY
-// ============================
-function renderHistory(){
-  historyList.innerHTML='';
-  const search=searchInput.value.trim().toLowerCase();
-  historyData.forEach(item=>{
-    if(item.code.toLowerCase().includes(search) || item.username.toLowerCase().includes(search)){
-      const div=document.createElement('div');
-      div.className='history-item';
-      div.innerHTML=`
-        <div>
-          <div class="history-meta">${item.username} — ${item.code}</div>
-          <div class="history-sub">${item.password} • ${item.time}</div>
-        </div>
-        <button class="icon-btn copy-btn" data-tooltip="Copy password">📋</button>
-      `;
-      div.querySelector('.copy-btn').onclick=()=>{navigator.clipboard.writeText(item.password); showToast("Copied!");};
-      historyList.appendChild(div);
-    }
-  });
-}
-
-// ============================
-// LOCAL STORAGE
-// ============================
-function saveHistory(){localStorage.setItem('redeemHistory',JSON.stringify(historyData));}
-function loadHistory(){historyData=JSON.parse(localStorage.getItem('redeemHistory')||'[]'); renderHistory();}
-
-// ============================
-// EVENT LISTENERS
-// ============================
-redeemBtn.onclick=redeemCode;
-clearBtn.onclick=()=>{codeInput.value='';};
-copyUser.onclick=()=>{navigator.clipboard.writeText(usernameEl.textContent); showToast("Copied username!");};
-copyPass.onclick=()=>{navigator.clipboard.writeText(passwordEl.dataset.real); showToast("Copied password!");};
-togglePass.onclick=()=>{ 
-  if(passwordEl.textContent.includes('•')) passwordEl.textContent=passwordEl.dataset.real;
-  else passwordEl.textContent=passwordEl.dataset.real.replace(/./g,'•');
-};
-searchInput.oninput=renderHistory;
-clearHistoryBtn.onclick=()=>{historyData=[];saveHistory();renderHistory();showToast("Đã xóa lịch sử!");};
-exportBtn.onclick=()=>{
-  let text=historyData.map(h=>`${h.time} — ${h.code} — ${h.username} — ${h.password}`).join('\n');
-  const blob=new Blob([text],{type:'text/plain'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;a.download='history.txt';
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast("Xuất file TXT thành công!");
-};
-
-// ============================
-// INIT
-// ============================
-loadHistory();
-</script>
-</body>
-</html>
+    const historyList = document.getElementById('historyList');
+    const searchInput =
+::contentReference[oaicite:0]{index=0}
+ 
