@@ -1,264 +1,84 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Giveaway Account - Blox Fruit</title>
+  <meta charset="UTF-8">
+  <title>Blox Fruit Giveaway</title>
   <style>
-    :root{
-      --bg:#f3f6f8;
-      --card:#ffffff;
-      --accent:#2fb86a;
-      --muted:#6b7280;
-      --shadow: 0 8px 24px rgba(16,24,40,0.08);
-      --maxw:720px;
-      font-family: "Inter", "Arial", sans-serif;
+    body { font-family: Arial, sans-serif; text-align: center; background: #f4f4f4; margin: 0; padding: 0; }
+    .container { margin-top: 50px; padding: 20px; background: #fff; border-radius: 10px; width: 400px; margin-left: auto; margin-right: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1);}
+    input { padding: 10px; width: 80%; margin: 10px 0; }
+    button { padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    .info { margin-top: 20px; font-size: 14px; }
+    img.avatar { margin-top: 10px; width: 100px; border-radius: 10px; }
+    .note { margin-top: 30px; font-size: 13px; color: #555; }
+    footer { margin-top: 50px; padding: 15px; background: #222; color: #FFD700; font-weight: bold; font-size: 18px; }
+    /* Pháo giấy animation */
+    .confetti { position: fixed; width: 10px; height: 10px; background: red; top: 0; animation: fall 3s linear infinite; }
+    @keyframes fall {
+      to { transform: translateY(100vh) rotate(720deg); }
     }
-    body{
-      margin:0;
-      background: linear-gradient(180deg,#f7fafc, var(--bg));
-      color:#111827;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-    }
-    .wrap{
-      max-width:var(--maxw);
-      margin:48px auto;
-      padding:24px;
-    }
-    .card{
-      background:var(--card);
-      border-radius:14px;
-      padding:36px;
-      box-shadow:var(--shadow);
-      text-align:center;
-    }
-    h1{
-      margin:0 0 8px 0;
-      font-size:26px;
-      letter-spacing:-0.4px;
-    }
-    p.lead{
-      margin:6px 0 18px 0;
-      color:var(--muted);
-    }
-    .form-row{
-      display:flex;
-      gap:12px;
-      justify-content:center;
-      margin-top:12px;
-      flex-wrap:wrap;
-    }
-    input[type="text"]{
-      width:360px;
-      max-width:84%;
-      padding:12px 14px;
-      border-radius:8px;
-      border:1px solid #e6eef4;
-      font-size:16px;
-      outline:none;
-    }
-    button{
-      background:var(--accent);
-      border:none;
-      color:#fff;
-      padding:12px 18px;
-      border-radius:8px;
-      font-weight:600;
-      cursor:pointer;
-      box-shadow: 0 6px 18px rgba(47,184,106,0.18);
-    }
-    .result{
-      margin-top:22px;
-      text-align:left;
-      display:flex;
-      gap:18px;
-      align-items:center;
-      justify-content:center;
-    }
-    .result .meta{
-      text-align:left;
-    }
-    .result p{ margin:6px 0; font-size:16px; }
-    .label{ color:var(--muted); font-size:13px; margin-bottom:4px; }
-    .badge{
-      display:inline-block;
-      background:#eefdf3;
-      color:#05843a;
-      padding:6px 10px;
-      border-radius:999px;
-      font-weight:700;
-      font-size:13px;
-    }
-    img.avatar{
-      width:120px;
-      height:120px;
-      object-fit:cover;
-      border-radius:12px;
-      border:1px solid #e6eef4;
-      background:linear-gradient(90deg,#fff,#fafafa);
-    }
-    .small{
-      font-size:12px;
-      color:var(--muted);
-    }
-    footer{
-      margin-top:18px;
-      text-align:right;
-      font-size:12px;
-      color:var(--muted);
-    }
-
-    /* responsive */
-    @media (max-width:520px){
-      input[type="text"]{ width:100%; }
-      .result{ flex-direction:column; align-items:center; text-align:center; }
-      footer{ text-align:center; }
-    }
-
-    /* subtle credit at bottom-left */
-    .credit {
-      position: fixed;
-      left: 12px;
-      bottom: 10px;
-      font-size:12px;
-      color: #9aa3ad;
-      background: rgba(255,255,255,0.6);
-      padding:6px 8px;
-      border-radius:8px;
-      backdrop-filter: blur(4px);
+    .dragon { position: fixed; bottom: 10px; left: 10px; width: 80px; animation: bounce 2s infinite; }
+    @keyframes bounce {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <h1>🎁 Giveaway Account Blox Fruit 🎁</h1>
-      <p class="lead">Nhập mã (mẫu: <code>HOANGLAM_xxx</code>) để nhận Username & Password</p>
+  <div class="container">
+    <h2>🎁 Giveaway Account Blox Fruit 🎁</h2>
+    <p>Nhập mã để nhận tài khoản</p>
+    <input id="codeInput" placeholder="Nhập mã...">
+    <button onclick="checkCode()">Nhận ngay</button>
 
-      <div class="form-row">
-        <input id="code" type="text" placeholder="Nhập mã (vd: HOANGLAM_3392ijdju2ns)" />
-        <button id="redeemBtn">Nhận ngay</button>
-      </div>
-
-      <div id="message" style="margin-top:14px;"></div>
-
-      <div id="output" class="result" style="display:none;">
-        <img id="avatar" class="avatar" src="" alt="Avatar" />
-        <div class="meta">
-          <p class="label">Username</p>
-          <p id="out-username" style="font-weight:700; font-size:18px; margin-bottom:6px;"></p>
-
-          <p class="label">Password</p>
-          <p id="out-password" style="font-weight:700; font-size:18px; color:#b91c1c"></p>
-
-          <div style="margin-top:8px;">
-            <span class="badge">Giveaway</span>
-          </div>
-        </div>
-      </div>
-
-      <footer class="small">
-        Lưu ý: Đây là demo trang giveaway. (Bạn có thể chỉnh thay mã / tài khoản trong mã nguồn.)
-      </footer>
-    </div>
+    <div id="result" class="info"></div>
+    <p class="note">⚠ Đây chỉ là website code chơi, nếu cần hợp tác làm website tiếp thì hãy liên hệ <b>Phan Hoàng Lâm</b>.</p>
   </div>
 
-  <div class="credit">Website được làm bởi Phan Hoàng Lâm</div>
+  <!-- Footer -->
+  <footer>🌟 Website được làm bởi Phan Hoàng Lâm 🌟</footer>
+
+  <!-- Rồng nhảy -->
+  <img class="dragon" src="https://i.gifer.com/7VE.gif" alt="Dragon">
 
   <script>
-    // === Dữ liệu: danh sách mã → account ===
-    // MÌNH ĐÃ BỎ GHI CHÚ THEO YÊU CẦU. Passwords đầy đủ.
     const codes = {
-      "HOANGLAM_3392ijdju2ns": { username: "MariotClot", password: "NAMHA123", roblox: "MariotClot" },
-      "HOANGLAM_a7k3m9":        { username: "LaiT1445",   password: "NAMHA123", roblox: "LaiT1445"   },
-      "HOANGLAM_q8z2p5":        { username: "MaMaimn2",   password: "NAMHA123", roblox: "MaMaimn2"   },
-      "HOANGLAM_r4t6w1":        { username: "MaMaBay321", password: "NAMHA123", roblox: "MaMaBay321" },
-      "HOANGLAM_yu72bf":        { username: "KatuRuler9x",password: "NAMHA123", roblox: "KatuRuler9x"},
-      "HOANGLAM_12xk9v":        { username: "Coconutne89",password: "NAMHA123", roblox: "Coconutne89"}
+      "HOANGLAM_3392": { username: "MariotClot", password: "NAMHA123" },
+      "HOANGLAM_a7k3": { username: "LaiT1445", password: "NAMHA123" },
+      "HOANGLAM_q8z2": { username: "MaMaimn2", password: "NAMHA123" },
+      "HOANGLAM_r4t6": { username: "MaMaBay321", password: "NAMHA123" },
+      "HOANGLAM_yu72": { username: "KatuRuler9x", password: "NAMHA123" },
+      "HOANGLAM_12xk": { username: "Coconutne89", password: "NAMHA123" }
     };
 
-    const btn = document.getElementById("redeemBtn");
-    const input = document.getElementById("code");
-    const msg = document.getElementById("message");
-    const out = document.getElementById("output");
-    const outUsername = document.getElementById("out-username");
-    const outPassword = document.getElementById("out-password");
-    const avatarImg = document.getElementById("avatar");
+    function checkCode() {
+      let code = document.getElementById("codeInput").value.trim();
+      let resultDiv = document.getElementById("result");
 
-    // placeholder avatar image if fetch fails
-    const placeholder = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150'><rect width='100%' height='100%' fill='%23f3f4f6'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%239aa3ad' font-size='14'>No Avatar</text></svg>";
-
-    // Try to fetch Roblox avatar headshot using Roblox APIs (may be rate-limited)
-    async function fetchRobloxAvatar(username) {
-      try {
-        // Step1: get userId(s) via POST to /v1/usernames/users
-        const res1 = await fetch("https://users.roblox.com/v1/usernames/users", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ usernames: [username] })
-        });
-        if (!res1.ok) return null;
-        const j1 = await res1.json();
-        if (!j1.data || j1.data.length === 0) return null;
-        const id = j1.data[0].id;
-        if (!id) return null;
-
-        // Step2: get thumbnail url
-        const thumbEndpoint = `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${id}&size=150x150&format=Png&isCircular=false`;
-        const res2 = await fetch(thumbEndpoint);
-        if (!res2.ok) return null;
-        const j2 = await res2.json();
-        if (j2.data && j2.data[0] && j2.data[0].imageUrl) {
-          return j2.data[0].imageUrl;
-        }
-        return null;
-      } catch (e) {
-        console.warn("Avatar fetch error:", e);
-        return null;
+      if (codes[code]) {
+        let acc = codes[code];
+        resultDiv.innerHTML = `
+          <p><b>Username:</b> ${acc.username}</p>
+          <p><b>Password:</b> ${acc.password}</p>
+          <img class="avatar" src="https://i.ibb.co/NLRnbxd/4013fcee-751a-4ca1-a49a-96fbcc9ab1c1.png" alt="Hoàng Lâm">
+          <p style="color: green; font-weight: bold;">Cảm ơn bạn đã thử website của Hoàng Lâm!</p>
+        `;
+        launchConfetti();
+      } else {
+        resultDiv.innerHTML = "<p style='color:red'>❌ Mã không hợp lệ!</p>";
       }
     }
 
-    async function redeem() {
-      const code = input.value.trim();
-      msg.innerHTML = "";
-      out.style.display = "none";
-
-      if (!code) {
-        msg.innerHTML = "<span style='color:#b91c1c'>Vui lòng nhập mã.</span>";
-        return;
+    function launchConfetti() {
+      for (let i = 0; i < 30; i++) {
+        let confetti = document.createElement("div");
+        confetti.className = "confetti";
+        confetti.style.left = Math.random() * window.innerWidth + "px";
+        confetti.style.backgroundColor = `hsl(${Math.random()*360},100%,50%)`;
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 3000);
       }
-      // case-insensitive? Currently codes are case-sensitive. You can change to .toUpperCase() if you prefer.
-      const entry = codes[code];
-      if (!entry) {
-        msg.innerHTML = "<span style='color:#b91c1c'>❌ Mã không hợp lệ hoặc đã sử dụng.</span>";
-        return;
-      }
-
-      // show loading
-      msg.innerHTML = "<span style='color:#15803d'>Đang kiểm tra mã...</span>";
-
-      // Fill username/password
-      outUsername.textContent = entry.username;
-      outPassword.textContent = entry.password;
-
-      // Try fetch avatar, fallback to placeholder
-      avatarImg.src = placeholder;
-      try {
-        const url = await fetchRobloxAvatar(entry.roblox);
-        avatarImg.src = url || placeholder;
-      } catch (e) {
-        avatarImg.src = placeholder;
-      }
-
-      // Display result
-      msg.innerHTML = "<span style='color:#0b6d3b'>✅ Mã hợp lệ — Vui lòng lưu thông tin bên dưới.</span>";
-      out.style.display = "flex";
     }
-
-    btn.addEventListener("click", redeem);
-    input.addEventListener("keydown", (e) => { if (e.key === "Enter") redeem(); });
-
   </script>
 </body>
 </html>
