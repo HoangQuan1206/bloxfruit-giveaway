@@ -5,68 +5,53 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Phan Hoàng Lâm - Code Entry System</title>
 <style>
-/* ============================
-   RESET & BASE
-============================ */
+/* RESET */
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
-body{background:#f4f6f8;color:#333;min-height:100vh;position:relative;overflow-x:hidden;}
-a{text-decoration:none;color:#1976d2;}
-a:hover{text-decoration:underline;}
+body{min-height:100vh;overflow-x:hidden;position:relative;}
 
 /* ============================
    BACKGROUND DRAGON
 ============================ */
-#bgDragon{
+body::before{
+  content:"";
   position:fixed;
-  right:5%;
-  bottom:0;
-  width:600px;
-  max-width:90%;
-  opacity:0.12;
+  top:0;left:0;width:100%;height:100%;
+  background:url("https://i.imgur.com/5qG5u3M.png") no-repeat center center/cover;
+  opacity:0.15;
   z-index:-1;
-  animation:floatDragon 8s ease-in-out infinite;
+  animation:floatDragon 10s ease-in-out infinite;
 }
 @keyframes floatDragon{
   0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-25px);}
+  50%{transform:translateY(-30px);}
 }
 
 /* ============================
-   LAYOUT
+   UI LAYOUT
 ============================ */
 .container{display:flex;flex-wrap:wrap;min-height:100vh;padding:20px;}
 .left-panel,.right-panel{
   flex:1;
   min-width:280px;
-  background:#fff;
+  background:rgba(255,255,255,0.92);
   margin:10px;
   border-radius:12px;
   box-shadow:0 4px 12px rgba(0,0,0,0.1);
   padding:20px;
-  z-index:1;
 }
-h2,h3{margin-bottom:10px;}
+h2,h3{margin-bottom:10px;color:#222;}
+a{text-decoration:none;color:#1976d2;}
+a:hover{text-decoration:underline;}
 
 /* ============================
    INPUTS & BUTTONS
 ============================ */
-input[type=text]{width:100%;padding:10px;margin:10px 0;border:1px solid #ccc;border-radius:6px;transition:0.3s;}
-input[type=text]:focus{border-color:#1976d2;box-shadow:0 0 6px rgba(25,118,210,0.5);outline:none;}
+input[type=text]{width:100%;padding:10px;margin:10px 0;border:1px solid #ccc;border-radius:6px;}
 button{
-  padding:8px 14px;
-  margin:5px;
-  border:none;border-radius:6px;
-  background:#1976d2;color:#fff;
-  cursor:pointer;transition:0.3s;
+  padding:8px 14px;margin:5px;border:none;border-radius:6px;
+  background:#1976d2;color:#fff;cursor:pointer;transition:0.3s;
 }
 button:hover{background:#125a9c;transform:scale(1.05);}
-button[data-tooltip]{position:relative;}
-button[data-tooltip]:hover::after{
-  content:attr(data-tooltip);
-  position:absolute;top:-28px;left:50%;transform:translateX(-50%);
-  background:rgba(0,0,0,0.75);color:#fff;
-  padding:4px 8px;border-radius:4px;font-size:12px;white-space:nowrap;
-}
 
 /* ============================
    RESULT & HISTORY
@@ -87,22 +72,19 @@ button[data-tooltip]:hover::after{
 /* ============================
    FOOTER
 ============================ */
-footer{text-align:center;padding:12px;color:#666;font-size:14px;margin-top:20px;}
+footer{text-align:center;padding:12px;color:#333;font-size:14px;margin-top:20px;background:rgba(255,255,255,0.8);border-radius:6px;}
 </style>
 </head>
 <body>
-
-<!-- BACKGROUND DRAGON -->
-<img id="bgDragon" src="https://i.imgur.com/5qG5u3M.png" alt="Dragon Background">
 
 <div class="container">
   <!-- LEFT PANEL -->
   <div class="left-panel">
     <h2>Hướng dẫn đăng nhập tài khoản</h2>
-    <p>1. Truy cập vào <a href="https://www.roblox.com/login" target="_blank">Roblox Login</a> để vào trang đăng nhập.</p>
-    <p>2. Nhập <strong>username</strong> và <strong>password</strong> đã nhận được từ code ở cột bên phải.</p>
-    <p>3. Nhấn <strong>Login</strong> để hoàn tất.</p>
-    <p>💡 Bạn có thể đăng nhập trên <strong>máy tính hoặc điện thoại</strong>.</p>
+    <p>1. Truy cập vào <a href="https://www.roblox.com/login" target="_blank">Roblox Login</a>.</p>
+    <p>2. Nhập <strong>username</strong> và <strong>password</strong> đã nhận từ code.</p>
+    <p>3. Nhấn <strong>Login</strong> để vào game.</p>
+    <p>💡 Có thể đăng nhập trên cả <strong>máy tính</strong> và <strong>điện thoại</strong>.</p>
     <p>4. Nếu quên mật khẩu, chọn <a href="https://www.roblox.com/login/forgot-password-or-username" target="_blank">Quên mật khẩu</a>.</p>
   </div>
 
@@ -110,12 +92,12 @@ footer{text-align:center;padding:12px;color:#666;font-size:14px;margin-top:20px;
   <div class="right-panel">
     <h2>Nhập code nhận tài khoản</h2>
     <input type="text" id="codeInput" placeholder="Nhập code tại đây">
-    <button id="redeemBtn" data-tooltip="Lấy tài khoản từ code">Redeem</button>
-    <button id="clearBtn" data-tooltip="Xóa code vừa nhập">Clear</button>
+    <button id="redeemBtn">Redeem</button>
+    <button id="clearBtn">Clear</button>
     <div id="loader">⏳ Đang xử lý...</div>
     <div id="result">
-      <p>Username: <span id="username"></span> <button id="copyUser" data-tooltip="Copy username">📋</button></p>
-      <p>Password: <span id="password"></span> <button id="copyPass" data-tooltip="Copy password">📋</button> <button id="togglePass" data-tooltip="Hiện/ẩn password">👁️</button></p>
+      <p>Username: <span id="username"></span> <button id="copyUser">📋</button></p>
+      <p>Password: <span id="password"></span> <button id="copyPass">📋</button> <button id="togglePass">👁️</button></p>
     </div>
 
     <h3>Lịch sử</h3>
@@ -127,25 +109,18 @@ footer{text-align:center;padding:12px;color:#666;font-size:14px;margin-top:20px;
 </div>
 
 <div id="toastContainer"></div>
-
 <footer>Được vận hành bởi Phan Hoàng Lâm</footer>
 
 <script>
-// ============================
-// DATA
-// ============================
 const ACCOUNTS={
-  "HOANGLAM_3392IJDS": { username:"MariotClot", password:"NAMHA123" }, 
-  "HOANGLAM_A7K3M9ZQ": { username:"LaiT1445", password:"NAMHA123" },
-  "HOANGLAM_Q8Z2P5LM": { username:"MaMaimn2", password:"NAMHA123" },
-  "HOANGLAM_R4T6W1BX": { username:"MaMaBay321", password:"NAMHA123" },
-  "HOANGLAM_YU72BF9K": { username:"KatuRuler9x", password:"NAMHA123" },
-  "HOANGLAM_12XK9VRC": { username:"Coconutne89", password:"NAMHA123" }
+  "HOANGLAM_3392IJDS":{username:"MariotClot",password:"NAMHA123"},
+  "HOANGLAM_A7K3M9ZQ":{username:"LaiT1445",password:"NAMHA123"},
+  "HOANGLAM_Q8Z2P5LM":{username:"MaMaimn2",password:"NAMHA123"},
+  "HOANGLAM_R4T6W1BX":{username:"MaMaBay321",password:"NAMHA123"},
+  "HOANGLAM_YU72BF9K":{username:"KatuRuler9x",password:"NAMHA123"},
+  "HOANGLAM_12XK9VRC":{username:"Coconutne89",password:"NAMHA123"}
 };
 
-// ============================
-// ELEMENTS
-// ============================
 const codeInput=document.getElementById('codeInput');
 const redeemBtn=document.getElementById('redeemBtn');
 const clearBtn=document.getElementById('clearBtn');
@@ -162,42 +137,27 @@ const exportBtn=document.getElementById('exportBtn');
 const clearHistoryBtn=document.getElementById('clearHistoryBtn');
 const toastContainer=document.getElementById('toastContainer');
 
-let historyData=[];
-let lastRedeem=0;
+let historyData=[],lastRedeem=0;
 
-// ============================
-// HELPERS
-// ============================
-function showToast(msg,timeout=2000){
-  const toast=document.createElement('div');
-  toast.className='toast'; toast.textContent=msg;
-  toastContainer.appendChild(toast);
-  setTimeout(()=>toast.style.opacity=1,50);
-  setTimeout(()=>{toast.style.opacity=0;setTimeout(()=>toast.remove(),300);},timeout);
+function showToast(msg,time=2000){
+  const t=document.createElement('div');t.className='toast';t.textContent=msg;
+  toastContainer.appendChild(t);setTimeout(()=>t.style.opacity=1,50);
+  setTimeout(()=>{t.style.opacity=0;setTimeout(()=>t.remove(),300);},time);
 }
 function createConfetti(){
-  for(let i=0;i<10;i++){
-    const c=document.createElement('div');
-    c.className='confetti';
+  for(let i=0;i<12;i++){
+    const c=document.createElement('div');c.className='confetti';
     c.style.left=Math.random()*window.innerWidth+'px';
     c.style.background=`hsl(${Math.random()*360},70%,60%)`;
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(),3000);
+    document.body.appendChild(c);setTimeout(()=>c.remove(),3000);
   }
 }
-
-// ============================
-// REDEEM
-// ============================
 function redeemCode(){
-  const now=Date.now();
-  if(now-lastRedeem<2000){showToast("⏳ Thử lại sau 2s");return;}
+  const now=Date.now();if(now-lastRedeem<2000){showToast("⏳ Thử lại sau 2s");return;}
   lastRedeem=now;
-
   const code=codeInput.value.trim().toUpperCase();
   if(!code){showToast("Chưa nhập mã!");return;}
-  loader.style.display='block'; result.style.display='none';
-
+  loader.style.display='block';result.style.display='none';
   setTimeout(()=>{
     loader.style.display='none';
     const acc=ACCOUNTS[code];
@@ -205,49 +165,35 @@ function redeemCode(){
       usernameEl.textContent=acc.username;
       passwordEl.textContent=acc.password.replace(/./g,'•');
       passwordEl.dataset.real=acc.password;
-      result.style.display='block';
-      showToast("🎉 Lấy thành công!"); createConfetti();
+      result.style.display='block';showToast("🎉 Thành công!");createConfetti();
       const nowStr=new Date().toLocaleString();
       historyData.unshift({code,username:acc.username,password:acc.password,time:nowStr});
-      renderHistory(); saveHistory();
-    }else showToast("❌ Mã không hợp lệ!");
+      renderHistory();saveHistory();
+    }else showToast("❌ Code không hợp lệ!");
   },800);
 }
-
-// ============================
-// HISTORY
-// ============================
 function renderHistory(){
   historyList.innerHTML='';
-  const search=searchInput.value.trim().toLowerCase();
+  const s=searchInput.value.trim().toLowerCase();
   historyData.forEach(item=>{
-    if(item.code.toLowerCase().includes(search)||item.username.toLowerCase().includes(search)){
-      const div=document.createElement('div');
-      div.className='history-item';
-      div.innerHTML=`
+    if(item.code.toLowerCase().includes(s)||item.username.toLowerCase().includes(s)){
+      const d=document.createElement('div');d.className='history-item';
+      d.innerHTML=`
         <div>
           <div class="history-meta">${item.username} — ${item.code}</div>
           <div class="history-sub">${item.password} • ${item.time}</div>
         </div>
-        <button class="copy-btn">📋</button>
-      `;
-      div.querySelector('.copy-btn').onclick=()=>{navigator.clipboard.writeText(item.password);showToast("Copied!");};
-      historyList.appendChild(div);
+        <button>📋</button>`;
+      d.querySelector('button').onclick=()=>{navigator.clipboard.writeText(item.password);showToast("Copied!");};
+      historyList.appendChild(d);
     }
   });
 }
-
-// ============================
-// STORAGE
-// ============================
 function saveHistory(){localStorage.setItem('redeemHistory',JSON.stringify(historyData));}
 function loadHistory(){historyData=JSON.parse(localStorage.getItem('redeemHistory')||'[]');renderHistory();}
 
-// ============================
-// EVENTS
-// ============================
 redeemBtn.onclick=redeemCode;
-clearBtn.onclick=()=>{codeInput.value='';};
+clearBtn.onclick=()=>codeInput.value='';
 copyUser.onclick=()=>{navigator.clipboard.writeText(usernameEl.textContent);showToast("Copied username!");};
 copyPass.onclick=()=>{navigator.clipboard.writeText(passwordEl.dataset.real);showToast("Copied password!");};
 togglePass.onclick=()=>{passwordEl.textContent.includes('•')?passwordEl.textContent=passwordEl.dataset.real:passwordEl.textContent=passwordEl.dataset.real.replace(/./g,'•');};
@@ -257,12 +203,9 @@ exportBtn.onclick=()=>{
   const text=historyData.map(h=>`${h.time} — ${h.code} — ${h.username} — ${h.password}`).join('\n');
   const blob=new Blob([text],{type:'text/plain'});const url=URL.createObjectURL(blob);
   const a=document.createElement('a');a.href=url;a.download='history.txt';a.click();URL.revokeObjectURL(url);
-  showToast("Xuất TXT thành công!");
+  showToast("Đã xuất TXT!");
 };
 
-// ============================
-// INIT
-// ============================
 loadHistory();
 </script>
 </body>
