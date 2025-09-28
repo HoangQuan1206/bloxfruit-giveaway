@@ -1,299 +1,240 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Giveaway Account Blox Fruit</title>
   <style>
-    :root{
-      --bg-dark:#0f1720;
-      --card-dark:#0b1220;
-      --muted-dark:#9aa3ad;
-      --accent:#22c55e;
-      --text-dark:#e6eef4;
-
-      --bg-light:#f3f6f8;
-      --card-light:#ffffff;
-      --muted-light:#4b5563;
-      --text-light:#0b1220;
-    }
-    html,body{height:100%;margin:0;font-family:Inter, "Segoe UI", Arial, sans-serif;}
-    body{
-      background: linear-gradient(180deg,var(--bg-dark), #111827);
-      color:var(--text-dark);
-      display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:28px;transition:all .25s;
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      transition: background 0.3s, color 0.3s;
     }
 
-    .wrap{
-      width:100%;max-width:900px;
-      display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start;
+    .container {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      width: 360px;
+      text-align: center;
     }
 
-    .card{
-      background: rgba(255,255,255,0.04);
-      border-radius:14px;padding:20px;box-shadow:0 6px 30px rgba(2,6,23,0.6);
-      backdrop-filter: blur(6px);
+    input {
+      padding: 10px;
+      width: 80%;
+      border-radius: 8px;
+      border: none;
+      margin: 10px 0;
     }
 
-    .left .title { font-size:20px;margin:0 0 8px 0; font-weight:700; text-align:left; color: #fff; }
-    .lead { color: rgba(255,255,255,0.75); margin:0 0 14px 0; font-size:14px; text-align:left; }
-
-    .form { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-    .form input[type="text"]{
-      flex:1; min-width:200px; padding:12px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.06);
-      background: rgba(255,255,255,0.02); color: #fff; font-size:15px; outline:none;
+    button {
+      padding: 10px 15px;
+      background: #28a745;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      margin: 5px;
     }
-    .form .btn {
-      padding:10px 14px; border-radius:10px; border:none; cursor:pointer; font-weight:700;
-      background: var(--accent); color:#072010;
-    }
-    .form .btn.secondary { background:transparent; color:var(--muted-dark); border:1px solid rgba(255,255,255,0.04); }
+    button:hover { background: #218838; }
 
-    /* Result box */
     .result {
-      margin-top:18px; display:none; align-items:center; gap:18px; padding:14px; border-radius:10px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      animation: pop .35s ease;
-    }
-    @keyframes pop { from{opacity:0; transform:translateY(-6px) scale(.995)} to{opacity:1; transform:none} }
-
-    .meta { flex:1; text-align:left; }
-    .meta .row{ display:flex; align-items:center; gap:8px; margin:8px 0; font-size:15px; }
-    .label { color: rgba(255,255,255,0.7); font-size:13px; min-width:74px; }
-    .value { font-weight:800; color:#fff; word-break:break-all; }
-
-    .copy-btn {
-      padding:6px 8px; border-radius:8px; background:rgba(255,255,255,0.06); border:none; color:#fff; cursor:pointer; font-weight:700;
+      margin-top: 20px;
+      background: #2c2c2c;
+      padding: 15px;
+      border-radius: 10px;
+      display: none;
+      animation: fadeIn 0.5s;
+      text-align: left;
     }
 
-    /* right column */
-    .right { width:100%; max-width:340px; }
-    .card.small { padding:16px; text-align:center; }
-    .history { margin-top:12px; text-align:left; max-height:340px; overflow:auto; }
-    .history h3 { margin:0 0 8px 0; color: rgba(255,255,255,0.85); }
-    .history ul{ list-style:none;padding:0;margin:0; }
-    .history li { background: rgba(255,255,255,0.03); padding:8px 10px; margin-bottom:8px; border-radius:8px; font-size:13px; color:#fff; }
+    .account-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 5px 0;
+    }
+    .account-line button {
+      background: #007bff;
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+    .account-line button:hover { background: #0056b3; }
+
+    .history {
+      margin-top: 20px;
+      width: 100%;
+      max-width: 360px;
+      text-align: left;
+    }
+
+    .history input {
+      width: 100%;
+      margin-bottom: 10px;
+      border: 1px solid #888;
+    }
+
+    .history ul {
+      list-style: none;
+      padding: 0;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .history li {
+      background: #2c2c2c;
+      margin: 5px 0;
+      padding: 8px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
 
     .footer {
-      margin-top:20px; text-align:center; font-weight:800; color:#ffd54a; letter-spacing:0.2px;
+      margin-top: 20px;
+      font-size: 14px;
+      color: gold;
     }
 
-    /* light theme */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Loader */
+    .loader {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #28a745;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 10px auto;
+      display: none;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Light mode */
     body.light {
-      background: linear-gradient(180deg, var(--bg-light), #e6eef4);
-      color:var(--text-light);
+      background-color: #f0f0f0;
+      color: #000;
     }
-    body.light .card { background: var(--card-light); box-shadow: 0 10px 30px rgba(2,6,23,0.06); color:var(--text-light); }
-    body.light .lead { color: var(--muted-light); }
-    body.light .form input { background:#fff; color:var(--text-light); border:1px solid #e6eef4; }
-    body.light .result { background:#fff; color:var(--text-light); }
-    body.light .history li { background:#fff; color:var(--text-light); border:1px solid #f0f0f0; }
-
-    /* toast */
-    .toast { position:fixed; right:18px; top:18px; background:#0b1220; color:#fff; padding:10px 14px;border-radius:10px; display:none; z-index:9999; }
-    .toast.show{ display:block; }
-
-    /* responsive */
-    @media (max-width:880px){
-      .wrap { grid-template-columns: 1fr; padding:0 8px; }
-      .right { order: -1; }
+    body.light .container {
+      background: #fff;
+      color: #000;
+    }
+    body.light .result, body.light .history li {
+      background: #eee;
+      color: #000;
+      border: 1px solid #ccc;
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <!-- LEFT: form + result -->
-    <div class="card left">
-      <div class="title">🎁 Nhập mã nhận tài khoản</div>
-      <p class="lead">Nhập mã theo dạng <code>HOANGLAM_xxxx</code> (không phân biệt hoa/thường).</p>
+  <div class="container">
+    <h2>Nhập mã để nhận tài khoản</h2>
+    <input type="text" id="codeInput" placeholder="HOANGLAM_xxxx">
+    <button onclick="checkCode()">Nhận ngay</button>
+    <button onclick="toggleTheme()">Đổi giao diện</button>
 
-      <div class="form" role="form" aria-label="Form nhập mã">
-        <input id="codeInput" type="text" placeholder="VD: HOANGLAM_3392ijdju2ns" aria-label="Input mã">
-        <button class="btn" id="redeemBtn">Nhận ngay</button>
-        <button class="btn secondary" id="themeBtn">Đổi giao diện</button>
-      </div>
+    <div class="loader" id="loader"></div>
+    <div class="result" id="resultBox"></div>
+  </div>
 
-      <div id="resultBox" class="result" aria-live="polite">
-        <div class="meta">
-          <div class="row"><div class="label">Username</div><div class="value" id="usernameVal">—</div>
-            <button class="copy-btn" id="copyUserBtn" title="Copy username">COPY</button></div>
-          <div class="row"><div class="label">Password</div><div class="value" id="passwordVal">—</div>
-            <button class="copy-btn" id="copyPassBtn" title="Copy password">COPY</button></div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- RIGHT: history / info -->
-    <div class="card small right">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-        <strong style="font-size:15px">Lịch sử đã nhận</strong>
-        <button class="copy-btn" id="clearBtn" title="Xóa lịch sử" style="background:#ff6b6b">XÓA</button>
-      </div>
-      <div class="history">
-        <ul id="historyList" aria-live="polite"></ul>
-      </div>
-
-      <div style="margin-top:12px;font-size:13px;color:rgba(255,255,255,0.75);">
-        <div><strong>Ghi chú:</strong></div>
-        <div style="margin-top:6px;color:rgba(255,255,255,0.6);font-size:13px">Mã không giới hạn, ai có mã đều nhập được.</div>
-      </div>
-    </div>
+  <div class="history">
+    <h3>Lịch sử đã nhận</h3>
+    <input type="text" id="searchHistory" placeholder="Tìm trong lịch sử..." onkeyup="filterHistory()">
+    <ul id="historyList"></ul>
   </div>
 
   <div class="footer">✨ Website được làm bởi Phan Hoàng Lâm ✨</div>
 
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script>
+    const accounts = {
+      "HOANGLAM_1234": {user: "MariotClot", pass: "NAMHA123"},
+      "HOANGLAM_5678": {user: "LaiT1445", pass: "ABC12345"},
+      "HOANGLAM_9999": {user: "DragonUser", pass: "DRAGON321"}
+    };
 
-<script>
-  // --- CONFIG: mapping mã → account (case-insensitive)
-  const ACCOUNTS = {
-    "HOANGLAM_3392ijdju2ns": { username: "MariotClot", password: "NAMHA123" },
-    "HOANGLAM_a7k3m9zq":     { username: "LaiT1445",   password: "NAMHA123" },
-    "HOANGLAM_q8z2p5lm":     { username: "MaMaimn2",   password: "NAMHA123" },
-    "HOANGLAM_r4t6w1bx":     { username: "MaMaBay321", password: "NAMHA123" },
-    "HOANGLAM_yu72bf9k":     { username: "KatuRuler9x",password: "NAMHA123" },
-    "HOANGLAM_12xk9vrc":     { username: "Coconutne89",password: "NAMHA123" }
-  };
-
-  // DOM
-  const codeInput = document.getElementById('codeInput');
-  const redeemBtn = document.getElementById('redeemBtn');
-  const themeBtn = document.getElementById('themeBtn');
-  const resultBox = document.getElementById('resultBox');
-  const usernameVal = document.getElementById('usernameVal');
-  const passwordVal = document.getElementById('passwordVal');
-  const copyUserBtn = document.getElementById('copyUserBtn');
-  const copyPassBtn = document.getElementById('copyPassBtn');
-  const historyList = document.getElementById('historyList');
-  const clearBtn = document.getElementById('clearBtn');
-  const toast = document.getElementById('toast');
-
-  // Utilities
-  function showToast(text, time=1400){
-    toast.textContent = text;
-    toast.classList.add('show');
-    toast.style.display = 'block';
-    clearTimeout(toast._t);
-    toast._t = setTimeout(()=>{ toast.style.display='none'; }, time);
-  }
-
-  function toKey(s){ return String(s||'').trim().toUpperCase(); }
-
-  // History persistence (localStorage)
-  const STORAGE_KEY = 'giveaway_history_v1';
-  function loadHistory(){
-    try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : [];
-    }catch(e){ return []; }
-  }
-  function saveHistory(arr){
-    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); }catch(e){}
-  }
-  function renderHistory(){
-    const arr = loadHistory();
-    historyList.innerHTML = '';
-    if(arr.length===0){
-      historyList.innerHTML = '<li style="opacity:.6">Chưa có lịch sử</li>';
-      return;
-    }
-    arr.forEach(it=>{
-      const li = document.createElement('li');
-      const t = document.createElement('div');
-      t.textContent = `${it.time} — ${it.code} → ${it.username} / ${it.password}`;
-      li.appendChild(t);
-      historyList.appendChild(li);
-    });
-  }
-
-  // initial render
-  renderHistory();
-
-  // Redeem handler
-  function redeem(){
-    const codeRaw = codeInput.value;
-    const key = toKey(codeRaw);
-    if(!key){
-      showToast('Vui lòng nhập mã');
-      return;
-    }
-    // find exact key among ACCOUNTS (keys stored as original), do case-insensitive
-    const matchedKey = Object.keys(ACCOUNTS).find(k => toKey(k) === key);
-    if(!matchedKey){
-      resultBox.style.display = 'block';
-      usernameVal.textContent = '—';
-      passwordVal.textContent = '—';
-      showToast('Mã không hợp lệ',1200);
-      return;
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Đã copy: " + text);
+      });
     }
 
-    const acc = ACCOUNTS[matchedKey];
-    usernameVal.textContent = acc.username;
-    passwordVal.textContent = acc.password;
-    resultBox.style.display = 'flex';
-
-    // add to history (most recent on top)
-    const arr = loadHistory();
-    const now = new Date();
-    const timeStr = now.toLocaleString();
-    arr.unshift({ code: matchedKey, username: acc.username, password: acc.password, time: timeStr });
-    // keep only latest 50 entries
-    if(arr.length>50) arr.length = 50;
-    saveHistory(arr);
-    renderHistory();
-
-    showToast('Hiển thị thông tin tài khoản');
-  }
-
-  // Copy functions
-  async function copyText(text){
-    try{
-      await navigator.clipboard.writeText(text);
-      showToast('Đã sao chép');
-    }catch(e){
-      // fallback
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand('copy'); showToast('Đã sao chép'); } catch(e2){ showToast('Không thể sao chép'); }
-      ta.remove();
+    function togglePassword(id) {
+      const span = document.getElementById(id);
+      if (span.dataset.hidden === "true") {
+        span.textContent = span.dataset.pass;
+        span.dataset.hidden = "false";
+      } else {
+        span.textContent = "••••••";
+        span.dataset.hidden = "true";
+      }
     }
-  }
 
-  // Events
-  redeemBtn.addEventListener('click', redeem);
-  codeInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') redeem(); });
-  copyUserBtn.addEventListener('click', ()=> copyText(usernameVal.textContent || '') );
-  copyPassBtn.addEventListener('click', ()=> copyText(passwordVal.textContent || '') );
+    function checkCode() {
+      const code = document.getElementById("codeInput").value.trim();
+      const resultBox = document.getElementById("resultBox");
+      const loader = document.getElementById("loader");
+      const historyList = document.getElementById("historyList");
 
-  // theme toggle (persist)
-  const THEME_KEY = 'giveaway_theme_v1';
-  function loadTheme(){ return localStorage.getItem(THEME_KEY)==='light'; }
-  function saveTheme(isLight){ localStorage.setItem(THEME_KEY, isLight ? 'light' : 'dark'); }
-  function applyTheme(){
-    const isLight = loadTheme();
-    document.body.classList.toggle('light', isLight);
-  }
-  function toggleTheme(){
-    const isLight = !loadTheme();
-    saveTheme(isLight);
-    applyTheme();
-  }
-  themeBtn.addEventListener('click', toggleTheme);
-  applyTheme();
+      resultBox.style.display = "none";
+      loader.style.display = "block";
 
-  // clear history
-  clearBtn.addEventListener('click', ()=>{
-    if(!confirm('Xóa toàn bộ lịch sử nhận tài khoản?')) return;
-    saveHistory([]);
-    renderHistory();
-    showToast('Đã xóa lịch sử');
-  });
+      setTimeout(() => {
+        loader.style.display = "none";
+        if (accounts[code]) {
+          const acc = accounts[code];
+          resultBox.innerHTML = `
+            <div class="account-line">
+              <span><b>Username:</b> ${acc.user}</span>
+              <button onclick="copyText('${acc.user}')">Copy</button>
+            </div>
+            <div class="account-line">
+              <span><b>Password:</b> 
+                <span id="passText" data-pass="${acc.pass}" data-hidden="true">••••••</span>
+              </span>
+              <button onclick="togglePassword('passText')">👁</button>
+              <button onclick="copyText('${acc.pass}')">Copy</button>
+            </div>
+          `;
+          resultBox.style.display = "block";
 
-  // accessibility: focus input on load
-  window.addEventListener('load', ()=> codeInput.focus());
-</script>
+          // Thêm vào lịch sử
+          const li = document.createElement("li");
+          li.textContent = `Code: ${code} → ${acc.user} / ${acc.pass}`;
+          historyList.appendChild(li);
+        } else {
+          resultBox.innerHTML = "<p style='color:red'>❌ Mã không hợp lệ!</p>";
+          resultBox.style.display = "block";
+        }
+      }, 1500);
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("light");
+    }
+
+    function filterHistory() {
+      const input = document.getElementById("searchHistory").value.toLowerCase();
+      const items = document.querySelectorAll("#historyList li");
+      items.forEach(li => {
+        li.style.display = li.textContent.toLowerCase().includes(input) ? "" : "none";
+      });
+    }
+  </script>
 </body>
 </html>
