@@ -6,18 +6,25 @@
   <style>
     body {
       font-family: "Times New Roman", serif;
-      background-color: #bfbfbf; /* nền xám */
+      background-color: #bfbfbf;
       color: #000;
-      text-align: center;
       padding: 20px;
     }
     .container {
+      display: flex;
+      gap: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+    .left, .right {
+      flex: 1;
       background: #e0e0e0;
       padding: 20px;
       border-radius: 12px;
-      width: 400px;
-      margin: auto;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    h2, h3 {
+      text-align: center;
     }
     input, button {
       font-family: "Times New Roman", serif;
@@ -25,7 +32,7 @@
       margin: 8px 0;
       border-radius: 6px;
       border: 1px solid #555;
-      width: 90%;
+      width: 100%;
     }
     button {
       cursor: pointer;
@@ -42,51 +49,72 @@
       border-radius: 8px;
       background: #d9d9d9;
     }
+    .field {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 8px 0;
+    }
+    .field span {
+      flex: 1;
+      margin-right: 10px;
+      word-break: break-all;
+    }
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      margin-left: 6px;
+    }
     .history {
-      margin-top: 20px;
+      margin-top: 15px;
       text-align: left;
       background: #d9d9d9;
       padding: 10px;
       border-radius: 8px;
-      max-height: 200px;
+      max-height: 300px;
       overflow-y: auto;
     }
     .history p {
       margin: 4px 0;
       font-size: 14px;
     }
-    .copy-btn {
-      margin-top: 5px;
-      padding: 5px 8px;
-      font-size: 14px;
-    }
-    .search-box {
-      width: 90%;
-    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>🎁 Nhập Mã Để Nhận Tài Khoản</h2>
-    <input type="text" id="codeInput" placeholder="Nhập mã tại đây...">
-    <button onclick="checkCode()">Xác nhận</button>
+    <!-- Bên trái -->
+    <div class="left">
+      <h2>🎁 Nhập Mã</h2>
+      <input type="text" id="codeInput" placeholder="Nhập mã tại đây...">
+      <button onclick="checkCode()">Xác nhận</button>
 
-    <div class="result" id="result" style="display:none;">
-      <p><b>Tài khoản:</b> <span id="username"></span> 
-        <button class="copy-btn" onclick="copyText('username')">Copy</button></p>
-      <p><b>Mật khẩu:</b> <span id="password"></span> 
-        <button class="copy-btn" onclick="copyText('password')">Copy</button></p>
+      <div class="result" id="result" style="display:none;">
+        <div class="field">
+          <b>Tài khoản:</b>
+          <span id="username"></span>
+          <button class="icon-btn" onclick="copyText('username')" title="Copy">📋</button>
+        </div>
+        <div class="field">
+          <b>Mật khẩu:</b>
+          <span id="password">•••••••</span>
+          <button class="icon-btn" onclick="togglePassword()" title="Ẩn/Hiện">👁</button>
+          <button class="icon-btn" onclick="copyText('passwordReal')" title="Copy">📋</button>
+        </div>
+      </div>
     </div>
 
-    <h3>Lịch sử đã nhận</h3>
-    <input type="text" id="searchInput" class="search-box" placeholder="Tìm kiếm..." onkeyup="searchHistory()">
-    <div class="history" id="history"></div>
-
-    <button onclick="exportHistory()">📂 Xuất file TXT</button>
+    <!-- Bên phải -->
+    <div class="right">
+      <h3>Lịch sử đã nhận</h3>
+      <input type="text" id="searchInput" placeholder="Tìm kiếm..." onkeyup="searchHistory()">
+      <div class="history" id="history"></div>
+      <button onclick="exportHistory()">📂 Xuất file TXT</button>
+    </div>
   </div>
 
   <script>
-    // Danh sách mã và tài khoản
     const accounts = {
       "HOANGLAM123": {user: "hoanglam01", pass: "matkhau01"},
       "HOANGLAM456": {user: "hoanglam02", pass: "matkhau02"},
@@ -94,15 +122,19 @@
     };
 
     let historyList = JSON.parse(localStorage.getItem("historyList")) || [];
+    let currentPassword = ""; 
+    let showPassword = false;
+
     renderHistory();
 
-    // Kiểm tra mã
     function checkCode() {
       const code = document.getElementById("codeInput").value.trim();
       const resultDiv = document.getElementById("result");
-      if(accounts[code]) {
+      if (accounts[code]) {
         document.getElementById("username").textContent = accounts[code].user;
-        document.getElementById("password").textContent = accounts[code].pass;
+        currentPassword = accounts[code].pass;
+        showPassword = false;
+        document.getElementById("password").textContent = "•••••••";
         resultDiv.style.display = "block";
         addToHistory(accounts[code].user, accounts[code].pass);
       } else {
@@ -112,14 +144,31 @@
       document.getElementById("codeInput").value = "";
     }
 
-    // Thêm vào lịch sử + lưu localStorage
+    function togglePassword() {
+      showPassword = !showPassword;
+      document.getElementById("password").textContent = showPassword ? currentPassword : "•••••••";
+    }
+
+    function copyText(id) {
+      let text = "";
+      if (id === "username") {
+        text = document.getElementById("username").textContent;
+      } else if (id === "passwordReal") {
+        text = currentPassword;
+      }
+      if (text) {
+        navigator.clipboard.writeText(text).then(() => {
+          alert("✅ Đã copy: " + text);
+        });
+      }
+    }
+
     function addToHistory(user, pass) {
       historyList.push({user, pass});
       localStorage.setItem("historyList", JSON.stringify(historyList));
       renderHistory();
     }
 
-    // Hiển thị lịch sử
     function renderHistory() {
       const historyDiv = document.getElementById("history");
       historyDiv.innerHTML = "";
@@ -130,26 +179,16 @@
       });
     }
 
-    // Copy text
-    function copyText(id) {
-      const text = document.getElementById(id).textContent;
-      navigator.clipboard.writeText(text).then(() => {
-        alert("✅ Đã copy: " + text);
-      });
-    }
-
-    // Tìm kiếm trong lịch sử
     function searchHistory() {
       const filter = document.getElementById("searchInput").value.toLowerCase();
       const historyDiv = document.getElementById("history");
       const items = historyDiv.getElementsByTagName("p");
-      for(let i=0; i<items.length; i++) {
+      for (let i = 0; i < items.length; i++) {
         const txt = items[i].textContent.toLowerCase();
         items[i].style.display = txt.includes(filter) ? "" : "none";
       }
     }
 
-    // Xuất file TXT
     function exportHistory() {
       let content = "Danh sách tài khoản đã nhận:\n";
       historyList.forEach((item, index) => {
@@ -162,7 +201,6 @@
       link.click();
     }
 
-    // Đồng bộ nhiều tab
     window.addEventListener("storage", () => {
       historyList = JSON.parse(localStorage.getItem("historyList")) || [];
       renderHistory();
