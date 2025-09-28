@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Phan Hoàng Lâm - Code Entry System</title>
+<title>Phan Hoàng Lâm - GiveAway Account</title>
 <style>
 /* ============================
    RESET & GLOBAL
@@ -54,9 +54,29 @@ button[data-tooltip]:hover::after{
 .toast{position:fixed;top:20px;right:20px;background:#333;color:#fff;padding:10px 15px;border-radius:5px;opacity:0;transition:0.3s;}
 .confetti{position:fixed;top:0;width:8px;height:8px;border-radius:50%;z-index:9999;animation:fall 3s linear forwards;}
 @keyframes fall{0%{transform:translateY(0) rotate(0deg);}100%{transform:translateY(100vh) rotate(360deg);}}
+
+/* ============================
+   DRAGON ANIMATION
+============================ */
+@keyframes jump {
+  0% { transform: translateY(0); }
+  25% { transform: translateY(-20px) rotate(-5deg); }
+  50% { transform: translateY(0) rotate(0deg); }
+  75% { transform: translateY(-15px) rotate(5deg); }
+  100% { transform: translateY(0); }
+}
+#blackDragon {
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  width:100px;
+  z-index:1000;
+  animation: jump 1s ease-in-out infinite;
+}
 </style>
 </head>
 <body>
+
 <div class="container">
   <!-- LEFT PANEL -->
   <div class="left-panel">
@@ -88,6 +108,9 @@ button[data-tooltip]:hover::after{
   </div>
 </div>
 
+<!-- DRAGON IMAGE -->
+<img src="https://img-cdn.xemgame.com/2024/01/05/tdc.jpg" alt="Black Dragon" id="blackDragon">
+
 <div id="toastContainer"></div>
 
 <script>
@@ -116,12 +139,10 @@ const passwordEl=document.getElementById('password');
 const copyUser=document.getElementById('copyUser');
 const copyPass=document.getElementById('copyPass');
 const togglePass=document.getElementById('togglePass');
-
 const historyList=document.getElementById('historyList');
 const searchInput=document.getElementById('searchInput');
 const exportBtn=document.getElementById('exportBtn');
 const clearHistoryBtn=document.getElementById('clearHistoryBtn');
-
 const toastContainer=document.getElementById('toastContainer');
 
 let historyData=[];
@@ -155,7 +176,6 @@ function redeemCode(){
   if(!code){showToast("Chưa nhập mã!"); return;}
   loader.style.display='block';
   result.style.display='none';
-
   setTimeout(()=>{
     loader.style.display='none';
     const acc=ACCOUNTS[code];
@@ -166,7 +186,6 @@ function redeemCode(){
       result.style.display='block';
       showToast("🎉 Lấy thành công!");
       createConfetti();
-
       const now=new Date().toLocaleString();
       historyData.unshift({code,username:acc.username,password:acc.password,time:now});
       renderHistory();
