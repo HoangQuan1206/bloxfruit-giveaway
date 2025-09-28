@@ -2,141 +2,162 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Nhận tài khoản</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giveaway Account Blox Fruit</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #1f1f1f, #2e2e2e);
+      background-color: #121212;
       color: white;
-      text-align: center;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      height: 100vh;
+      justify-content: flex-start;
+      min-height: 100vh;
       margin: 0;
+      padding: 20px;
+      transition: background 0.3s, color 0.3s;
     }
 
     .container {
-      background: #2b2b2b;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0px 0px 20px rgba(0,0,0,0.6);
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
       width: 350px;
-    }
-
-    h2 {
-      margin-bottom: 20px;
+      text-align: center;
     }
 
     input {
-      padding: 12px;
+      padding: 10px;
       width: 80%;
-      border-radius: 10px;
+      border-radius: 8px;
       border: none;
-      margin-bottom: 15px;
-      font-size: 16px;
+      margin: 10px 0;
     }
 
     button {
-      padding: 12px 25px;
+      padding: 10px 15px;
       background: #28a745;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
       color: white;
-      font-size: 16px;
       cursor: pointer;
+      font-weight: bold;
+      margin: 5px;
     }
-
-    button:hover {
-      background: #218838;
-    }
+    button:hover { background: #218838; }
 
     .result {
       margin-top: 20px;
-      background: #1e1e1e;
-      padding: 20px;
-      border-radius: 15px;
+      background: #2c2c2c;
+      padding: 15px;
+      border-radius: 10px;
       display: none;
+      animation: fadeIn 0.5s;
     }
 
-    .info {
-      margin: 10px 0;
-      font-size: 16px;
+    .history {
+      margin-top: 20px;
+      width: 100%;
+      max-width: 350px;
+      text-align: left;
     }
 
-    .copy-btn {
-      margin-left: 10px;
-      padding: 5px 10px;
-      background: #007bff;
-      border: none;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
+    .history ul {
+      list-style: none;
+      padding: 0;
     }
 
-    .avatar {
-      margin-top: 15px;
+    .history li {
+      background: #2c2c2c;
+      margin: 5px 0;
+      padding: 8px;
+      border-radius: 8px;
+      font-size: 14px;
     }
 
     .footer {
-      margin-top: 15px;
+      margin-top: 20px;
       font-size: 14px;
       color: gold;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Light mode */
+    body.light {
+      background-color: #f0f0f0;
+      color: #000;
+    }
+    body.light .container {
+      background: #fff;
+      color: #000;
+    }
+    body.light .result, body.light .history li {
+      background: #eee;
+      color: #000;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>Nhập mã để nhận tài khoản</h2>
-    <input type="text" id="code" placeholder="HOANGLAM_xxxx">
-    <br>
-    <button onclick="getAccount()">Nhận ngay</button>
+    <input type="text" id="codeInput" placeholder="HOANGLAM_xxxx">
+    <button onclick="checkCode()">Nhận ngay</button>
+    <button onclick="toggleTheme()">Đổi giao diện</button>
 
-    <div id="result" class="result">
-      <div class="info">
-        <b>Username:</b> <span id="username"></span>
-        <button class="copy-btn" onclick="copyText('username')">Copy</button>
-      </div>
-      <div class="info">
-        <b>Password:</b> <span id="password"></span>
-        <button class="copy-btn" onclick="copyText('password')">Copy</button>
-      </div>
-      <div class="avatar">
-        <img id="avatar" src="" alt="Avatar" width="100">
-      </div>
-    </div>
-
-    <div class="footer">✨ Website được làm bởi Phan Hoàng Lâm ✨</div>
+    <div class="result" id="resultBox"></div>
   </div>
 
+  <div class="history">
+    <h3>Lịch sử đã nhận</h3>
+    <ul id="historyList"></ul>
+  </div>
+
+  <div class="footer">✨ Website được làm bởi Phan Hoàng Lâm ✨</div>
+
+  <audio id="successSound" src="https://www.myinstants.com/media/sounds/notification.mp3"></audio>
+
   <script>
-    // Danh sách tài khoản
     const accounts = {
-      "HOANGLAM_1234": {user: "MariotClot", pass: "NAMHA123", avatar: "perry.gif"},
-      "HOANGLAM_5678": {user: "LamKing", pass: "PASS567", avatar: "perry.gif"},
-      "HOANGLAM_9999": {user: "HoangUser", pass: "ABC999", avatar: "perry.gif"},
-      "HOANGLAM_2025": {user: "TestAcc", pass: "HELLO25", avatar: "perry.gif"}
+      "HOANGLAM_1234": {user: "MariotClot", pass: "NAMHA123"},
+      "HOANGLAM_5678": {user: "LaiT1445", pass: "ABC12345"},
+      "HOANGLAM_9999": {user: "DragonUser", pass: "DRAGON321"}
     };
 
-    function getAccount() {
-      const code = document.getElementById("code").value.trim();
-      const resultDiv = document.getElementById("result");
+    function checkCode() {
+      const code = document.getElementById("codeInput").value.trim();
+      const resultBox = document.getElementById("resultBox");
+      const historyList = document.getElementById("historyList");
+      const sound = document.getElementById("successSound");
 
       if (accounts[code]) {
-        document.getElementById("username").innerText = accounts[code].user;
-        document.getElementById("password").innerText = accounts[code].pass;
-        document.getElementById("avatar").src = accounts[code].avatar;
-        resultDiv.style.display = "block";
+        const acc = accounts[code];
+        resultBox.innerHTML = `
+          <p><b>Username:</b> ${acc.user}</p>
+          <p><b>Password:</b> ${acc.pass}</p>
+        `;
+        resultBox.style.display = "block";
+
+        // Phát âm thanh
+        sound.play();
+
+        // Thêm vào lịch sử
+        const li = document.createElement("li");
+        li.textContent = `Code: ${code} → ${acc.user} / ${acc.pass}`;
+        historyList.appendChild(li);
       } else {
-        alert("❌ Mã không hợp lệ!");
-        resultDiv.style.display = "none";
+        resultBox.innerHTML = "<p style='color:red'>❌ Mã không hợp lệ!</p>";
+        resultBox.style.display = "block";
       }
     }
 
-    function copyText(id) {
-      const text = document.getElementById(id).innerText;
-      navigator.clipboard.writeText(text);
-      alert("✅ Đã copy: " + text);
+    function toggleTheme() {
+      document.body.classList.toggle("light");
     }
   </script>
 </body>
