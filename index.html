@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Blox Fruit Giveaway</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; background: #f4f4f4; }
+    .container { margin-top: 50px; padding: 20px; background: #fff; border-radius: 10px; width: 400px; margin-left: auto; margin-right: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1);}
+    input { padding: 10px; width: 80%; margin: 10px 0; }
+    button { padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    .info { margin-top: 20px; font-size: 14px; }
+    img { margin-top: 10px; width: 100px; border-radius: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🎁 Giveaway Account Blox Fruit 🎁</h2>
+    <p>Nhập mã để nhận tài khoản</p>
+    <input id="codeInput" placeholder="Nhập mã...">
+    <button onclick="checkCode()">Nhận ngay</button>
+
+    <div id="result" class="info"></div>
+  </div>
+
+  <script>
+    const accounts = {
+      "CODE1": {
+        username: "MariotClot",
+        password: "NAMHA123",
+        img: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-Png/352a91a38ef2.jpg"
+      },
+      "CODE2": {
+        username: "LaiT1445",
+        password: "NAMHA123",
+        img: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-Png/f12c21bba44.jpg"
+      }
+    };
+
+    function checkCode() {
+      let code = document.getElementById("codeInput").value.trim();
+      let resultDiv = document.getElementById("result");
+
+      if (accounts[code]) {
+        let acc = accounts[code];
+        resultDiv.innerHTML = `
+          <p><b>Username:</b> ${acc.username}</p>
+          <p><b>Password:</b> ${acc.password}</p>
+          <img src="${acc.img}" alt="Avatar">
+        `;
+      } else {
+        resultDiv.innerHTML = "<p style='color:red'>❌ Mã không hợp lệ!</p>";
+      }
+    }
+  </script>
+</body>
+</html>
