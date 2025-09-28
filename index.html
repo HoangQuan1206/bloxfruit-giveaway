@@ -51,8 +51,8 @@ button[data-tooltip]:hover::after{
 /* ============================
    DRAGON IMAGE
 ============================ */
-#dragonContainer{width:100%;text-align:center;margin:20px 0;}
-#dragonImg{max-width:90%;height:auto;animation:dragonJump 2s infinite;}
+#dragonContainer{width:100%;text-align:center;margin:20px 0;position:relative;overflow:hidden;}
+#dragonImg{max-width:90%;height:auto;display:block;margin:0 auto;}
 
 /* ============================
    TOAST & CONFETTI
@@ -60,7 +60,6 @@ button[data-tooltip]:hover::after{
 .toast{position:fixed;top:20px;right:20px;background:#333;color:#fff;padding:10px 15px;border-radius:5px;opacity:0;transition:0.3s;}
 .confetti{position:fixed;top:0;width:8px;height:8px;border-radius:50%;z-index:9999;animation:fall 3s linear forwards;}
 @keyframes fall{0%{transform:translateY(0) rotate(0deg);}100%{transform:translateY(100vh) rotate(360deg);}}
-@keyframes dragonJump{0%,100%{transform:translateY(0);}50%{transform:translateY(-20px);}}
 </style>
 </head>
 <body>
@@ -141,8 +140,10 @@ const exportBtn=document.getElementById('exportBtn');
 const clearHistoryBtn=document.getElementById('clearHistoryBtn');
 
 const toastContainer=document.getElementById('toastContainer');
+const dragonImg=document.getElementById('dragonImg');
 
 let historyData=[];
+let lastRedeemTime=0; // Anti DDOS
 
 // ============================
 // HELPER FUNCTIONS
@@ -166,9 +167,29 @@ function createConfetti(){
 }
 
 // ============================
+// DRAGON ANIMATION (Anti Lag)
+// ============================
+let dragonY=0;
+let dragonDir=1;
+function animateDragon(){
+  dragonY+=dragonDir*0.5; // tốc độ nhảy
+  if(dragonY>20 || dragonY<0) dragonDir*=-1;
+  dragonImg.style.transform=`translateY(${-dragonY}px)`;
+  requestAnimationFrame(animateDragon);
+}
+requestAnimationFrame(animateDragon);
+
+// ============================
 // REDEEM CODE
 // ============================
 function redeemCode(){
+  const now=Date.now();
+  if(now - lastRedeemTime < 2000){ // Anti DDOS 2s delay
+    showToast("❌ Vui lòng đợi trước khi redeem lại!");
+    return;
+  }
+  lastRedeemTime=now;
+
   const code=codeInput.value.trim().toUpperCase();
   if(!code){showToast("Chưa nhập mã!"); return;}
   loader.style.display='block';
@@ -185,14 +206,14 @@ function redeemCode(){
       showToast("🎉 Lấy thành công!");
       createConfetti();
 
-      const now=new Date().toLocaleString();
-      historyData.unshift({code,username:acc.username,password:acc.password,time:now});
+      const nowStr=new Date().toLocaleString();
+      historyData.unshift({code,username:acc.username,password:acc.password,time:nowStr});
       renderHistory();
       saveHistory();
     } else {
       showToast("❌ Mã không hợp lệ!");
     }
-  },1000);
+  },500); // xử lý nhanh hơn để giảm lag
 }
 
 // ============================
