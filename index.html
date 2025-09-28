@@ -5,853 +5,113 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Giveaway Accounts — Hoàng Lâm</title>
 
-<!--
-  IMPORTANT:
-  - Setup EmailJS as described in the top comment before using "Ghi chú gửi Gmail".
-  - Replace EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY in the JS config.
--->
-
 <!-- Google font: modern, easy-to-read -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
+<!-- Confetti -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
 <style>
-  /* =========================
-     Reset & Base
-     ========================= */
-  :root{
-    --bg: #e0e0e0;
-    --panel: #f2f2f2;
-    --card: #ededed;
-    --muted: #6c6c6c;
-    --accent: #9e9e9e;       /* button accent */
-    --accent-strong: #7c7c7c;
-    --success: #2f8f2f;
-    --danger: #c43f3f;
-    --radius: 12px;
-    --shadow: 0 10px 30px rgba(0,0,0,0.12);
-  }
-
-  html,body{ height:100%; margin:0; padding:0; background:var(--bg); font-family:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif; color:#111; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
-
-  *{ box-sizing:border-box; }
-
-  /* =========================
-     Layout
-     ========================= */
-  .page {
-    max-width:1200px;
-    margin:28px auto;
-    padding:18px;
-    display:grid;
-    grid-template-columns: 1fr 420px;
-    gap:20px;
-  }
-
-  @media (max-width:980px){
-    .page { grid-template-columns: 1fr; padding: 12px; }
-  }
-
-  .card {
-    background: linear-gradient(180deg,var(--panel), #e8e8e8);
-    border-radius: var(--radius);
-    padding:18px;
-    box-shadow: var(--shadow);
-    border: 1px solid rgba(0,0,0,0.05);
-  }
-
-  .header {
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:12px;
-    margin-bottom:8px;
-  }
-
-  h1 { font-size:20px; margin:0; display:flex;gap:10px; align-items:center; font-weight:700; }
-  .sub { color:var(--muted); font-size:13px; margin-top:6px; }
-
-  /* =========================
-     Left area: input & result
-     ========================= */
-  .left .controls {
-    display:flex;
-    gap:10px;
-    align-items:center;
-    margin-top:6px;
-    flex-wrap:wrap;
-  }
-
-  .input {
-    flex:1 1 420px;
-    min-width:220px;
-    padding:12px 14px;
-    border-radius:10px;
-    border:1px solid rgba(0,0,0,0.06);
-    background:white;
-    font-size:15px;
-  }
-
-  .btn {
-    background:var(--accent);
-    color:white;
-    border:none;
-    padding:10px 14px;
-    border-radius:10px;
-    font-weight:700;
-    cursor:pointer;
-  }
-  .btn.ghost {
-    background:transparent; color:var(--accent-strong); border:1px solid rgba(0,0,0,0.06);
-  }
-  .btn.warn { background:var(--danger); }
-
-  .result-card {
-    margin-top:16px;
-    border-radius:10px;
-    padding:12px;
-    background: linear-gradient(180deg,#fff,#fafafa);
-    border:1px solid rgba(0,0,0,0.04);
-    display:none;
-  }
-
-  .field {
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    padding:8px 0;
-    border-bottom:1px dashed rgba(0,0,0,0.03);
-  }
-  .field:last-child{ border-bottom:none; }
-
-  .label {
-    min-width:110px;
-    font-weight:600;
-    color:#111;
-  }
-  .value {
-    flex:1 1 auto;
-    font-weight:700;
-    color:#111;
-    word-break:break-word;
-    text-align:left;
-  }
-
-  .icon-btn {
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    padding:8px;
-    border-radius:8px;
-    border:1px solid rgba(0,0,0,0.06);
-    background: #fff;
-    cursor:pointer;
-    font-weight:700;
-  }
-
-  .small { font-size:12px; color:var(--muted); }
-
-  /* loader */
-  .loader {
-    width:42px; height:42px; border-radius:50%;
-    border:5px solid rgba(0,0,0,0.06); border-top-color:var(--accent-strong);
-    animation: spin 0.95s linear infinite; margin: 10px auto; display:none;
-  }
-  @keyframes spin { to { transform:rotate(360deg); } }
-
-  /* =========================
-     Right area: history
-     ========================= */
-  .history-controls {
-    display:flex; gap:8px; align-items:center; margin-bottom:8px;
-  }
-  .search {
-    flex:1; padding:10px 12px; border-radius:8px; border:1px solid rgba(0,0,0,0.06); background:white;
-  }
-  .history-list {
-    padding:8px; border-radius:8px; background:#fff; border:1px solid rgba(0,0,0,0.04); max-height:520px; overflow:auto;
-  }
-
-  .history-item {
-    display:flex; gap:8px; align-items:center; justify-content:space-between;
-    padding:10px; border-radius:8px; border:1px solid rgba(0,0,0,0.03); margin-bottom:8px; background:#fff;
-  }
-  .history-meta { font-weight:700; color:#111; margin-bottom:6px; }
-  .history-sub { color:var(--muted); font-size:13px; word-break:break-word; }
-
-  .history-actions { display:flex; gap:8px; align-items:center; }
-
-  /* footer */
-  footer { grid-column: 1 / -1; margin-top:8px; text-align:center; font-weight:700; color:#333; }
-
-  /* small screens */
-  @media(max-width:520px){
-    .field { flex-direction:column; align-items:flex-start; gap:6px; }
-    .label { min-width:0; }
-    .input { width:100%; }
-    .controls { width:100%; }
-    .page { padding:8px; }
-  }
+:root{
+  --bg:#e0e0e0; --panel:#f2f2f2; --card:#ededed;
+  --muted:#6c6c6c; --accent:#9e9e9e; --accent-strong:#7c7c7c;
+  --success:#2f8f2f; --danger:#c43f3f;
+  --radius:12px; --shadow:0 10px 30px rgba(0,0,0,0.12);
+}
+html,body{height:100%;margin:0;padding:0;background:var(--bg);font-family:'Poppins',system-ui,'Segoe UI',Roboto,Arial,sans-serif;color:#111;}
+*{box-sizing:border-box;}
+.page{max-width:1200px;margin:28px auto;padding:18px;display:grid;grid-template-columns:1fr 420px;gap:20px;}
+@media(max-width:980px){.page{grid-template-columns:1fr;padding:12px;}}
+.card{background:linear-gradient(180deg,var(--panel),#e8e8e8);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,0.05);}
+.header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;}
+h1{font-size:20px;margin:0;display:flex;gap:10px;align-items:center;font-weight:700;}
+.sub{color:var(--muted);font-size:13px;margin-top:6px;}
+.input{flex:1 1 420px;min-width:220px;padding:12px 14px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);background:white;font-size:15px;transition:all .3s;}
+.btn{background:var(--accent);color:white;border:none;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer;transition:all .25s;}
+.btn.ghost{background:transparent;color:var(--accent-strong);border:1px solid rgba(0,0,0,0.06);}
+.btn.warn{background:var(--danger);}
+.btn:hover{transform:translateY(-2px);box-shadow:var(--shadow);}
+.result-card{margin-top:16px;border-radius:10px;padding:12px;background:linear-gradient(180deg,#fff,#fafafa);border:1px solid rgba(0,0,0,0.04);display:none;}
+.field{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed rgba(0,0,0,0.03);}
+.field:last-child{border-bottom:none;}
+.label{min-width:110px;font-weight:600;color:#111;}
+.value{flex:1 1 auto;font-weight:700;color:#111;word-break:break-word;text-align:left;}
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;padding:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);background:#fff;cursor:pointer;font-weight:700;transition:all .25s;}
+.icon-btn:hover{background:#f0f0f0;}
+.small{font-size:12px;color:var(--muted);}
+.loader{width:42px;height:42px;border-radius:50%;border:5px solid rgba(0,0,0,0.06);border-top-color:var(--accent-strong);animation:spin 0.95s linear infinite;margin:10px auto;display:none;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.history-controls{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+.search{flex:1;padding:10px 12px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);background:white;}
+.history-list{padding:8px;border-radius:8px;background:#fff;border:1px solid rgba(0,0,0,0.04);max-height:520px;overflow:auto;transition:all .3s;}
+.history-item{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.03);margin-bottom:8px;background:#fff;}
+.history-meta{font-weight:700;color:#111;margin-bottom:6px;}
+.history-sub{color:var(--muted);font-size:13px;word-break:break-word;}
+.history-actions{display:flex;gap:8px;align-items:center;}
+footer{grid-column:1/-1;margin-top:8px;text-align:center;font-weight:700;color:#333;}
+@media(max-width:520px){.field{flex-direction:column;align-items:flex-start;gap:6px;}.label{min-width:0;}.input{width:100%;}.controls{width:100%;}.page{padding:8px;}}
+@keyframes shake{0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-6px);}40%,80%{transform:translateX(6px);}}
+.shake{animation:shake 0.5s;}
+.tooltip{position:absolute;background:#333;color:#fff;padding:4px 8px;border-radius:6px;font-size:12px;opacity:0;pointer-events:none;transition:opacity .25s;}
 </style>
 </head>
 <body>
-
-<main class="page" role="main" aria-labelledby="mainTitle">
-  <!-- LEFT -->
-  <section class="card left" aria-labelledby="leftTitle">
-    <div class="header">
-      <div>
-        <h1 id="leftTitle">🎁 Nhập mã nhận tài khoản</h1>
-        <div class="sub">Nhập mã theo mẫu <code>HOANGLAM_xxxx</code> (không phân biệt hoa/thường)</div>
-      </div>
-      <div style="text-align:right;">
-        <!-- small help or brand -->
-        <div class="small">Giveaway System</div>
-      </div>
-    </div>
-
-    <div class="controls">
-      <input id="codeInput" class="input" type="text" placeholder="VD: HOANGLAM_3392ijdju2ns" aria-label="Nhập mã" />
-      <button id="redeemBtn" class="btn" aria-label="Nhận ngay">Nhận ngay</button>
-      <button id="clearBtn" class="btn ghost" aria-label="Xóa ô nhập">Xóa</button>
-    </div>
-
-    <div id="loader" class="loader" role="status" aria-live="polite" aria-hidden="true"></div>
-
-    <div id="result" class="result-card" role="status" aria-live="polite">
-      <div class="field">
-        <div class="label">Tài khoản</div>
-        <div class="value" id="username">—</div>
-        <button id="copyUser" class="icon-btn" title="Copy username" aria-label="Sao chép username">📋</button>
-      </div>
-
-      <div class="field">
-        <div class="label">Mật khẩu</div>
-        <div class="value" id="password" style="letter-spacing:2px;">••••••••</div>
-        <button id="togglePass" class="icon-btn" title="Hiện/ẩn mật khẩu" aria-label="Hiện ẩn mật khẩu">👁</button>
-        <button id="copyPass" class="icon-btn" title="Copy password" aria-label="Sao chép mật khẩu">📋</button>
-      </div>
-
-      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
-        <button id="noteBtn" class="btn ghost" title="Ghi chú / gửi qua Gmail">Ghi chú</button>
-        <button id="scrollHistBtn" class="btn ghost">Mở lịch sử</button>
-      </div>
-    </div>
-
-    <div style="margin-top:12px; color:var(--muted); font-size:13px;">
-      Lưu ý: dữ liệu được lưu trên trình duyệt (localStorage). Muốn an toàn hơn cần backend.
-    </div>
-  </section>
-
-  <!-- RIGHT: History -->
-  <aside class="card right" aria-labelledby="rightTitle">
-    <div class="header">
-      <div>
-        <h1 id="rightTitle">Lịch sử đã nhận</h1>
-        <div class="sub">Danh sách mã đã được nhập (mới nhất ở trên)</div>
-      </div>
-      <div style="display:flex; gap:8px;">
-        <button id="exportBtn" class="btn ghost" title="Tải file TXT">📁 Xuất TXT</button>
-        <button id="clearHistoryBtn" class="btn warn" title="Xóa toàn bộ">XÓA</button>
-      </div>
-    </div>
-
-    <div class="history-controls">
-      <input id="searchInput" class="search" type="search" placeholder="Tìm username, code, thời gian..." aria-label="Tìm lịch sử" />
-    </div>
-
-    <div id="historyList" class="history-list" role="list" aria-live="polite">
-      <!-- history items injected here -->
-    </div>
-
-    <div style="margin-top:10px; color:var(--muted); font-size:13px;">
-      Vận hành bởi <strong>Phan Hoàng Lâm</strong>
-    </div>
-  </aside>
-
-  <!-- footer -->
-  <footer class="card">
-    <div>✨ Website được làm bởi <strong>Phan Hoàng Lâm</strong> ✨</div>
-    <div style="font-size:13px;color:var(--muted);margin-top:6px;">Bạn có thể xuất file TXT để lưu trữ hoặc gửi ghi chú qua email.</div>
-  </footer>
-</main>
-
-<!-- Modal: Note / Send Email -->
-<div id="noteModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); align-items:center; justify-content:center; z-index:9999;">
-  <div style="width:100%; max-width:520px; background:#fff; border-radius:12px; padding:18px; box-shadow:var(--shadow);">
-    <h2 style="margin:0 0 8px 0;">Gửi Ghi chú qua Email</h2>
-    <div style="color:var(--muted); font-size:13px; margin-bottom:12px;">Nội dung sẽ được gửi tới <strong>hoangquanphan1206@gmail.com</strong>. (Giới hạn 3 lần / 10 phút để tránh spam.)</div>
-
-    <div style="display:flex; flex-direction:column; gap:8px;">
-      <input id="noteName" placeholder="Tên (tùy chọn)" style="padding:10px; border-radius:8px; border:1px solid #ddd;" />
-      <input id="noteEmail" placeholder="Email người gửi (tùy chọn)" style="padding:10px; border-radius:8px; border:1px solid #ddd;" />
-      <textarea id="noteMessage" placeholder="Viết ghi chú ở đây..." rows="6" style="padding:10px; border-radius:8px; border:1px solid #ddd;"></textarea>
-
-      <div style="display:flex; gap:8px; justify-content:flex-end;">
-        <button id="noteCancel" class="btn ghost">Hủy</button>
-        <button id="noteSend" class="btn">Gửi</button>
-      </div>
+<main class="page">
+<section class="card left">
+  <div class="header">
+    <div>
+      <h1>🎁 Nhập mã nhận tài khoản</h1>
+      <div class="sub">Nhập mã <code>HOANGLAM_xxxx</code> (không phân biệt hoa/thường)</div>
     </div>
   </div>
-</div>
+  <div class="controls">
+    <input id="codeInput" class="input" type="text" placeholder="VD: HOANGLAM_3392IJDJU2NS"/>
+    <button id="redeemBtn" class="btn">Nhận ngay</button>
+    <button id="clearBtn" class="btn ghost">Xóa</button>
+  </div>
+  <div id="loader" class="loader"></div>
+  <div id="result" class="result-card">
+    <div class="field">
+      <div class="label">Tài khoản</div>
+      <div class="value" id="username">—</div>
+      <button id="copyUser" class="icon-btn">📋</button>
+    </div>
+    <div class="field">
+      <div class="label">Mật khẩu</div>
+      <div class="value" id="password">••••••••</div>
+      <button id="togglePass" class="icon-btn">👁</button>
+      <button id="copyPass" class="icon-btn">📋</button>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px;">
+      <button id="scrollHistBtn" class="btn ghost">Mở lịch sử</button>
+    </div>
+  </div>
+  <div style="margin-top:12px;color:var(--muted);font-size:13px;">Lưu ý: Đây chỉ là website thử, chưa được chính thức công bố.</div>
+</section>
 
-<!-- ==========================
-     SCRIPT: logic & EmailJS
-     ========================== -->
+<aside class="card right">
+  <div class="header">
+    <div>
+      <h1>Lịch sử đã nhận</h1>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button id="exportBtn" class="btn ghost">📁 Xuất TXT</button>
+      <button id="clearHistoryBtn" class="btn warn">XÓA</button>
+    </div>
+  </div>
+  <div class="history-controls">
+    <input id="searchInput" class="search" type="search" placeholder="Tìm username, code, thời gian..." />
+  </div>
+  <div id="historyList" class="history-list"></div>
+  <div style="margin-top:10px;color:var(--muted);font-size:13px;">Vận hành bởi <strong>Phan Hoàng Lâm</strong></div>
+</aside>
+
+<footer class="card">
+  <div>✨ Website được làm bởi <strong>Phan Hoàng Lâm</strong> ✨</div>
+</footer>
+</main>
+
 <script>
-/* ============================
-   CONFIG
-   - Replace EmailJS IDs with your own values BEFORE using send feature
-   ============================ */
-
-// EmailJS config (REPLACE with your info from https://dashboard.emailjs.com)
-const EMAILJS_SERVICE_ID   = 'YOUR_EMAILJS_SERVICE_ID';   // e.g., 'service_xxx'
-const EMAILJS_TEMPLATE_ID  = 'YOUR_EMAILJS_TEMPLATE_ID';  // e.g., 'template_yyy'
-const EMAILJS_PUBLIC_KEY   = 'YOUR_EMAILJS_PUBLIC_KEY';   // e.g., 'user_zzzz'
-
-// The destination email used in template (in case you use template param)
-const TO_EMAIL = 'hoangquanphan1206@gmail.com';
-
-// Sending rate limits: protect from spam (client-side)
-const SEND_LIMIT_MAX = 3;
-const SEND_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
-
-/* ============================
-   ACCOUNTS data
-   - keys stored uppercase (case-insensitive match)
-   - change/add as needed
-   ============================ */
 const ACCOUNTS = {
-  "HOANGLAM_3392IJDJU2NS": { username: "MariotClot", password: "NAMHA123" },
-  "HOANGLAM_A7K3M9ZQ":     { username: "LaiT1445",   password: "NAMHA123" },
-  "HOANGLAM_Q8Z2P5LM":     { username: "MaMaimn2",   password: "NAMHA123" },
-  "HOANGLAM_R4T6W1BX":     { username: "MaMaBay321", password: "NAMHA123" },
-  "HOANGLAM_YU72BF9K":     { username: "KatuRuler9x",password: "NAMHA123" },
-  "HOANGLAM_12XK9VRC":     { username: "Coconutne89",password: "NAMHA123" }
-};
-
-/* ============================
-   STORAGE KEYS
-   ============================ */
-const STORAGE_HISTORY_KEY = 'giveaway_history_v3';
-const STORAGE_SEND_LOG_KEY = 'giveaway_sendlog_v1'; // track send times for rate limit
-
-/* ============================
-   DOM elements
-   ============================ */
-const dom = {
-  codeInput: document.getElementById('codeInput'),
-  redeemBtn: document.getElementById('redeemBtn'),
-  clearBtn: document.getElementById('clearBtn'),
-  loader: document.getElementById('loader'),
-  resultCard: document.getElementById('result'),
-  usernameEl: document.getElementById('username'),
-  passwordEl: document.getElementById('password'),
-  copyUser: document.getElementById('copyUser'),
-  copyPass: document.getElementById('copyPass'),
-  togglePass: document.getElementById('togglePass'),
-
-  // history
-  searchInput: document.getElementById('searchInput'),
-  historyList: document.getElementById('historyList'),
-  exportBtn: document.getElementById('exportBtn'),
-  clearHistoryBtn: document.getElementById('clearHistoryBtn'),
-
-  // modal / note
-  noteBtn: document.getElementById('noteBtn'),
-  noteModal: document.getElementById('noteModal'),
-  noteName: document.getElementById('noteName'),
-  noteEmail: document.getElementById('noteEmail'),
-  noteMessage: document.getElementById('noteMessage'),
-  noteCancel: document.getElementById('noteCancel'),
-  noteSend: document.getElementById('noteSend'),
-
-  scrollHistBtn: document.getElementById('scrollHistBtn')
-};
-
-/* ============================
-   App state
-   ============================ */
-let state = {
-  current: { code:'', username:'', password:'' }, // currently shown
-  passwordShown: false,
-  history: [] // array of { time, code, username, password }
-};
-
-/* ============================
-   Helpers: storage load/save
-   ============================ */
-function loadHistory(){
-  try {
-    const raw = localStorage.getItem(STORAGE_HISTORY_KEY);
-    if(!raw) return [];
-    const arr = JSON.parse(raw);
-    if(Array.isArray(arr)) return arr;
-    return [];
-  } catch(e){
-    console.warn('loadHistory error', e);
-    return [];
-  }
-}
-function saveHistory(arr){
-  try {
-    localStorage.setItem(STORAGE_HISTORY_KEY, JSON.stringify(arr));
-  } catch(e){
-    console.warn('saveHistory error', e);
-  }
-}
-
-/* send log (timestamps) for rate limit */
-function loadSendLog(){
-  try {
-    const raw = localStorage.getItem(STORAGE_SEND_LOG_KEY);
-    if(!raw) return [];
-    const arr = JSON.parse(raw);
-    if(Array.isArray(arr)) return arr;
-    return [];
-  } catch(e){ return []; }
-}
-function saveSendLog(arr){
-  try { localStorage.setItem(STORAGE_SEND_LOG_KEY, JSON.stringify(arr)); } catch(e){ }
-}
-function addSendTimestamp(){
-  const arr = loadSendLog();
-  arr.push(Date.now());
-  // keep last few
-  if(arr.length > 100) arr.splice(0, arr.length - 100);
-  saveSendLog(arr);
-}
-function countSendWithinWindow(){
-  const arr = loadSendLog();
-  const cutoff = Date.now() - SEND_LIMIT_WINDOW_MS;
-  return arr.filter(ts => ts >= cutoff).length;
-}
-
-/* ============================
-   UI helpers
-   ============================ */
-function showLoader(show){
-  dom.loader.style.display = show ? 'block' : 'none';
-}
-function showResult(show){
-  dom.resultCard.style.display = show ? 'block' : 'none';
-}
-function maskPassword(p){
-  if(!p) return '—';
-  const len = Math.max(4, Math.min(6, p.length));
-  return '*'.repeat(len) + (p.length > len ? '...' : '');
-}
-function nowStr(){
-  return new Date().toLocaleString();
-}
-
-/* ============================
-   Render history (list)
-   ============================ */
-function renderHistory(){
-  const arr = state.history || [];
-  const q = (dom.searchInput.value || '').toLowerCase().trim();
-  dom.historyList.innerHTML = '';
-
-  if(arr.length === 0){
-    const p = document.createElement('div');
-    p.textContent = 'Chưa có lịch sử';
-    p.style.color = 'var(--muted)';
-    p.style.padding = '12px';
-    dom.historyList.appendChild(p);
-    return;
-  }
-
-  arr.forEach((entry, idx) => {
-    // simple search filter
-    const serial = `${entry.time} ${entry.code} ${entry.username} ${entry.password}`.toLowerCase();
-    if(q && !serial.includes(q)) return;
-
-    const item = document.createElement('div');
-    item.className = 'history-item';
-
-    const left = document.createElement('div');
-    left.style.minWidth = '0';
-    left.className = 'history-left';
-
-    const meta = document.createElement('div');
-    meta.className = 'history-meta';
-    meta.textContent = `${entry.time} — ${entry.code}`;
-
-    const sub = document.createElement('div');
-    sub.className = 'history-sub';
-    sub.textContent = `${entry.username}  |  Pass: ${maskPassword(entry.password)}`;
-
-    left.appendChild(meta);
-    left.appendChild(sub);
-
-    const actions = document.createElement('div');
-    actions.className = 'history-actions';
-
-    // show/hide toggle
-    const showBtn = document.createElement('button');
-    showBtn.className = 'btn ghost';
-    showBtn.textContent = 'HIỆN';
-    showBtn.addEventListener('click', () => {
-      if(showBtn.textContent === 'HIỆN'){
-        sub.textContent = `${entry.username}  |  Pass: ${entry.password}`;
-        showBtn.textContent = 'ẨN';
-      } else {
-        sub.textContent = `${entry.username}  |  Pass: ${maskPassword(entry.password)}`;
-        showBtn.textContent = 'HIỆN';
-      }
-    });
-
-    // copy
-    const copyBtn = document.createElement('button');
-    copyBtn.className = 'btn ghost';
-    copyBtn.textContent = 'COPY';
-    copyBtn.title = 'Copy username và password';
-    copyBtn.addEventListener('click', async () => {
-      await copyToClipboard(`${entry.username}\t${entry.password}`);
-    });
-
-    // delete
-    const delBtn = document.createElement('button');
-    delBtn.className = 'btn warn';
-    delBtn.textContent = 'XÓA';
-    delBtn.addEventListener('click', () => {
-      if(!confirm('Xóa mục này khỏi lịch sử?')) return;
-      state.history.splice(idx, 1);
-      saveHistory(state.history);
-      // write to localStorage (this will trigger storage event in other tabs too)
-      localStorage.setItem(STORAGE_HISTORY_KEY, JSON.stringify(state.history));
-      renderHistory();
-    });
-
-    actions.appendChild(showBtn);
-    actions.appendChild(copyBtn);
-    actions.appendChild(delBtn);
-
-    item.appendChild(left);
-    item.appendChild(actions);
-
-    dom.historyList.appendChild(item);
-  });
-}
-
-/* ============================
-   Clipboard helper
-   ============================ */
-async function copyToClipboard(text){
-  try {
-    await navigator.clipboard.writeText(String(text));
-    showToast('Đã sao chép vào clipboard');
-    return true;
-  } catch(e){
-    // fallback
-    try {
-      const ta = document.createElement('textarea');
-      ta.value = String(text);
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      ta.remove();
-      showToast('Đã sao chép vào clipboard');
-      return true;
-    } catch(e2){
-      showToast('Không thể sao chép');
-      return false;
-    }
-  }
-}
-
-/* ============================
-   Redeem logic
-   ============================ */
-function redeem(){
-  const raw = (dom.codeInput.value || '').trim();
-  const key = raw.toUpperCase();
-  if(!key){
-    showToast('Vui lòng nhập mã');
-    return;
-  }
-
-  showLoader(true);
-  showResult(false);
-
-  // small simulated delay
-  setTimeout(() => {
-    showLoader(false);
-    // find account
-    const matched = Object.keys(ACCOUNTS).find(k => k.toUpperCase() === key);
-    if(!matched){
-      showToast('Mã không hợp lệ');
-      return;
-    }
-    const acc = ACCOUNTS[matched];
-    // update state
-    state.current = { code: matched, username: acc.username, password: acc.password };
-    // show in UI masked
-    dom.usernameEl.textContent = acc.username;
-    dom.passwordEl.textContent = maskPassword(acc.password);
-    dom.passwordEl.dataset.real = acc.password;
-    state.passwordShown = false;
-    showResult(true);
-    // add to history (newest first)
-    const entry = { time: nowStr(), code: matched, username: acc.username, password: acc.password };
-    state.history.unshift(entry);
-    if(state.history.length > 1000) state.history.length = 1000;
-    saveHistory(state.history);
-    // write to localStorage to notify other tabs (explicit write)
-    localStorage.setItem(STORAGE_HISTORY_KEY, JSON.stringify(state.history));
-    renderHistory();
-    dom.codeInput.value = '';
-  }, 750);
-}
-
-/* ============================
-   Toggle password visibility in result
-   ============================ */
-function togglePasswordResult(){
-  const real = dom.passwordEl.dataset.real || '';
-  if(!real) return;
-  if(state.passwordShown){
-    dom.passwordEl.textContent = maskPassword(real);
-    state.passwordShown = false;
-  } else {
-    dom.passwordEl.textContent = real;
-    state.passwordShown = true;
-  }
-}
-
-/* ============================
-   Export TXT
-   ============================ */
-function exportTxt(){
-  if(!state.history || state.history.length === 0){
-    showToast('Không có lịch sử để xuất');
-    return;
-  }
-  const lines = state.history.map(it => `${it.time} — ${it.code} — ${it.username} / ${it.password}`);
-  const content = lines.join('\n');
-  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'accounthoanglam.txt';
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-  showToast('Bắt đầu tải accounthoanglam.txt');
-}
-
-/* ============================
-   Modal: show / hide
-   ============================ */
-function openNoteModal(){
-  // quick rate-limit check
-  const sendCount = countSendWithinWindow();
-  if(sendCount >= SEND_LIMIT_MAX){
-    showToast(`Giới hạn gửi: ${SEND_LIMIT_MAX} lần / ${(SEND_LIMIT_WINDOW_MS/60000)} phút`);
-    return;
-  }
-  dom.noteModal.style.display = 'flex';
-  dom.noteName.value = '';
-  dom.noteEmail.value = '';
-  dom.noteMessage.value = `Mã: ${state.current.code || '[chưa có]'}\nUsername: ${state.current.username || ''}\n`; // pre-fill with current
-}
-function closeNoteModal(){
-  dom.noteModal.style.display = 'none';
-}
-
-/* ============================
-   EmailJS send (client-side)
-   - requires user to set EMAILJS_* config at top
-   - uses fetch to EmailJS REST API as fallback if SDK not loaded
-   ============================ */
-async function sendNoteEmail(){
-  const name = (dom.noteName.value || '').trim();
-  const fromEmail = (dom.noteEmail.value || '').trim();
-  const message = (dom.noteMessage.value || '').trim();
-
-  if(!message){
-    alert('Vui lòng nhập nội dung gửi.');
-    return;
-  }
-
-  // check rate limit
-  const count = countSendWithinWindow();
-  if(count >= SEND_LIMIT_MAX){
-    alert(`Đã vượt giới hạn gửi (${SEND_LIMIT_MAX} lần trong ${SEND_LIMIT_WINDOW_MS/60000} phút). Vui lòng thử lại sau.`);
-    return;
-  }
-
-  // requires EmailJS config
-  if(!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY ||
-     EMAILJS_SERVICE_ID.startsWith('YOUR') || EMAILJS_TEMPLATE_ID.startsWith('YOUR') || EMAILJS_PUBLIC_KEY.startsWith('YOUR')){
-    alert('Tính năng gửi email chưa được cấu hình. Vui lòng cài đặt EmailJS và cập nhật cấu hình trong file.');
-    return;
-  }
-
-  // Prepare template parameters; adapt these names to your EmailJS template variables
-  const templateParams = {
-    to_email: TO_EMAIL,
-    from_name: name || 'Người dùng web',
-    from_email: fromEmail || 'no-reply@example.com',
-    subject: `Ghi chú từ website — ${state.current.code || 'NoCode'}`,
-    message: message,
-    code: state.current.code || '',
-    username: state.current.username || '',
-    password: state.current.password || ''
-  };
-
-  // show "sending" UI
-  dom.noteSend.disabled = true;
-  dom.noteSend.textContent = 'Đang gửi...';
-
-  try{
-    // Use EmailJS REST API endpoint (no dependency)
-    // Docs: https://www.emailjs.com/docs/rest-api/send/
-    const payload = {
-      service_id: EMAILJS_SERVICE_ID,
-      template_id: EMAILJS_TEMPLATE_ID,
-      user_id: EMAILJS_PUBLIC_KEY,
-      template_params: templateParams
-    };
-
-    const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-      method: 'POST',
-      headers: { 'Content-Type':'application/json' },
-      body: JSON.stringify(payload)
-    });
-
-    if(res.ok){
-      addSendTimestamp(); // log
-      showToast('Gửi ghi chú thành công');
-      closeNoteModal();
-    } else {
-      const txt = await res.text();
-      console.error('EmailJS send error', res.status, txt);
-      alert('Gửi thất bại. Kiểm tra cấu hình EmailJS (service/template/public key).');
-    }
-  } catch(err){
-    console.error('Send note error', err);
-    alert('Lỗi khi gửi ghi chú. Kiểm tra kết nối mạng và cấu hình.');
-  } finally {
-    dom.noteSend.disabled = false;
-    dom.noteSend.textContent = 'Gửi';
-  }
-}
-
-/* ============================
-   Storage event for multi-tab sync
-   ============================ */
-window.addEventListener('storage', (ev) => {
-  if(ev.key === STORAGE_HISTORY_KEY){
-    state.history = loadHistory();
-    renderHistory();
-  }
-  // send log also could be synced, but not necessary
-});
-
-/* ============================
-   Event bindings
-   ============================ */
-function bindEvents(){
-  dom.redeemBtn.addEventListener('click', redeem);
-  dom.codeInput.addEventListener('keydown', (e) => { if(e.key === 'Enter') redeem(); });
-  dom.clearBtn.addEventListener('click', () => { dom.codeInput.value = ''; dom.codeInput.focus(); });
-
-  dom.copyUser.addEventListener('click', async () => {
-    const t = dom.usernameEl ? dom.usernameEl.textContent : document.getElementById('username').textContent;
-    if(t && t !== '—') await copyToClipboard(t);
-  });
-
-  dom.copyPass.addEventListener('click', async () => {
-    const real = dom.passwordEl ? dom.passwordEl.dataset.real : document.getElementById('password').dataset.real;
-    if(real) await copyToClipboard(real);
-  });
-
-  dom.togglePass.addEventListener('click', togglePasswordResult);
-
-  dom.searchInput.addEventListener('input', renderHistory);
-
-  dom.exportBtn.addEventListener('click', exportTxt);
-  dom.clearHistoryBtn.addEventListener('click', () => {
-    if(!confirm('Bạn có chắc muốn xóa toàn bộ lịch sử?')) return;
-    state.history = [];
-    saveHistory(state.history);
-    localStorage.setItem(STORAGE_HISTORY_KEY, JSON.stringify(state.history));
-    renderHistory();
-  });
-
-  dom.noteBtn.addEventListener('click', openNoteModal);
-  dom.noteCancel.addEventListener('click', closeNoteModal);
-  dom.noteSend.addEventListener('click', sendNoteEmail);
-
-  dom.scrollHistBtn.addEventListener('click', () => {
-    document.getElementById('historyList').scrollIntoView({ behavior:'smooth' });
-  });
-}
-
-/* ============================
-   Init
-   ============================ */
-function init(){
-  state.history = loadHistory();
-  renderHistory();
-  bindEvents();
-  dom.codeInput.focus();
-}
-
-/* start */
-init();
-
-/* ============================
-   Small helper: initial content for EmailJS placeholders
-   - If you prefer to use EmailJS SDK, you can also include their script:
-   <script src="https://cdn.emailjs.com/sdk/3.2.0/email.min.js"></script>
-   emailjs.init('YOUR_PUBLIC_KEY');
-   - But here we used REST API to avoid loading SDK.
-   ============================ */
-
-/* ============================
-   Small utility functions defined earlier but used here
-   ============================ */
-function showToast(msg){
-  const box = document.createElement('div');
-  box.textContent = msg;
-  box.style.position = 'fixed';
-  box.style.right = '18px';
-  box.style.top = '18px';
-  box.style.zIndex = 99999;
-  box.style.background = 'rgba(0,0,0,0.8)';
-  box.style.color = '#fff';
-  box.style.padding = '8px 12px';
-  box.style.borderRadius = '8px';
-  box.style.fontWeight = 700;
-  document.body.appendChild(box);
-  setTimeout(()=> { box.style.opacity = '0'; box.style.transition = 'opacity .3s'; }, 1200);
-  setTimeout(()=> { box.remove(); }, 1500);
-}
-
-/* small util to count sends within window */
-function addSendTimestamp(){
-  addSendTimestampImpl();
-}
-function addSendTimestampImpl(){
-  const arr = loadSendLog();
-  arr.push(Date.now());
-  // keep last 200 timestamps
-  if(arr.length > 200) arr.splice(0, arr.length - 200);
-  saveSendLog(arr);
-}
-function countSendWithinWindow(){
-  const arr = loadSendLog();
-  const cutoff = Date.now() - SEND_LIMIT_WINDOW_MS;
-  return arr.filter(ts => ts >= cutoff).length;
-}
-
-/* load initial send log if missing */
-if(!localStorage.getItem(STORAGE_SEND_LOG_KEY)) localStorage.setItem(STORAGE_SEND_LOG_KEY, JSON.stringify([]));
-
-</script>
-</body>
-</html>
+  "HOANGLAM_3392IJDJU2NS": { username:"MariotClot", password:"NAMHA123" },
+  "HO
