@@ -3,100 +3,134 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Redeem Code Tool - Full Version</title>
+<title>Redeem Code Tool - Full Xịn</title>
 <style>
-/* ============================ RESET & GLOBAL =========================== */
+/* =========================================
+   RESET & GLOBAL STYLES
+========================================= */
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
-body{background:#f0f2f5;color:#333;}
-a{text-decoration:none;color:#007bff;}
-a:hover{text-decoration:underline;}
+body{background:#f5f5f5;color:#333;overflow-x:hidden;}
+a{text-decoration:none;color:#007bff;transition:0.3s;}
+a:hover{text-decoration:underline;color:#0056b3;}
+button, input{transition:all 0.3s ease;}
 button{cursor:pointer;}
-input,button{outline:none;}
-/* ============================ LAYOUT =========================== */
-.container{display:flex;flex-wrap:wrap;min-height:100vh;}
-.left-panel, .right-panel{padding:20px;border-radius:10px;margin:10px;box-shadow:0 2px 12px rgba(0,0,0,0.1);}
-.left-panel{flex:1;min-width:280px;background:#fff;}
-.right-panel{flex:2;min-width:320px;background:#fff;}
-h2{margin-bottom:15px;color:#222;}
-h3{margin-top:20px;color:#444;}
-/* ============================ INPUTS & BUTTONS =========================== */
-input[type=text]{width:100%;padding:10px;margin:5px 0 15px 0;border:1px solid #ccc;border-radius:6px;transition:0.2s;}
-input[type=text]:focus{border-color:#007bff;}
-button{padding:10px 15px;margin:5px;border:none;border-radius:5px;background:#007bff;color:#fff;transition:0.2s;}
-button:hover{background:#0056b3;}
-.icon-btn{padding:5px 8px;font-size:14px;margin-left:5px;transition:0.2s;}
-.icon-btn:hover{background:#e0e0e0;border-radius:4px;}
+/* =========================================
+   CONTAINER & LAYOUT
+========================================= */
+.container{display:flex;flex-wrap:wrap;min-height:100vh;padding:10px;}
+.left-panel, .right-panel{padding:20px;margin:10px;background:#fff;border-radius:10px;box-shadow:0 2px 15px rgba(0,0,0,0.1);}
+.left-panel{flex:1;min-width:280px;}
+.right-panel{flex:2;min-width:320px;}
+
+/* =========================================
+   INPUTS & BUTTONS
+========================================= */
+input[type=text]{width:100%;padding:12px;margin:8px 0;border:1px solid #ccc;border-radius:5px;outline:none;font-size:14px;}
+input[type=text]:focus{border-color:#007bff;box-shadow:0 0 8px rgba(0,123,255,0.3);}
+button{padding:10px 15px;margin:5px;border:none;border-radius:5px;background:#007bff;color:#fff;cursor:pointer;font-size:14px;position:relative;}
+button:hover{background:#0056b3;transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,0.2);}
+.icon-btn{padding:5px 8px;font-size:14px;margin-left:5px;position:relative;}
+.icon-btn:hover{background:#0056b3;transform:scale(1.1);}
+input[title], button[title]{position:relative;}
+/* =========================================
+   TOOLTIP
+========================================= */
+input[title]:hover::after,
+button[title]:hover::after{
+  content: attr(title);
+  position:absolute;
+  top:-28px; left:50%;
+  transform:translateX(-50%);
+  background:rgba(0,0,0,0.8);
+  color:#fff;
+  padding:4px 8px;
+  font-size:12px;
+  border-radius:4px;
+  white-space:nowrap;
+  z-index:9999;
+  opacity:1;
+}
+/* =========================================
+   LOADER & RESULT
+========================================= */
 #loader{display:none;margin:10px 0;color:#007bff;font-weight:bold;}
-#result{display:none;padding:10px;margin-top:10px;background:#e7f5ff;border-radius:5px;position:relative;}
-/* ============================ HISTORY =========================== */
-.history-item{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #eee;transition:0.2s;}
-.history-item:hover{background:#f5f5f5;}
+#result{display:none;padding:10px;margin-top:10px;background:#e7f5ff;border-radius:5px;}
+#result p{margin:6px 0;font-size:14px;}
+/* =========================================
+   HISTORY
+========================================= */
+.history-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #eee;transition:0.3s;}
+.history-item:hover{background:#f0f8ff;}
 .history-meta{font-weight:bold;}
 .history-sub{font-size:12px;color:#666;}
-/* ============================ TOAST =========================== */
-.toast{position:fixed;top:20px;right:20px;background:#333;color:#fff;padding:10px 15px;border-radius:5px;opacity:0;transition:0.3s;z-index:9999;}
-/* ============================ CONFETTI =========================== */
+/* =========================================
+   TOAST & CONFETTI
+========================================= */
+.toast{position:fixed;top:20px;right:20px;background:#333;color:#fff;padding:10px 15px;border-radius:5px;opacity:0;transition:0.3s;}
 .confetti{position:fixed;top:0;width:8px;height:8px;border-radius:50%;z-index:9999;animation:fall 3s linear forwards;}
 @keyframes fall{0%{transform:translateY(0) rotate(0deg);}100%{transform:translateY(100vh) rotate(360deg);}}
-/* ============================ TOOLTIP =========================== */
-.tooltip{position:absolute;background:#333;color:#fff;padding:5px 10px;border-radius:4px;font-size:12px;opacity:0;pointer-events:none;transition:0.2s;}
+/* =========================================
+   ADDITIONAL ANIMATION
+========================================= */
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+button:hover{animation:bounce 0.3s;}
+/* =========================================
+   CUSTOM SCROLLBAR
+========================================= */
+::-webkit-scrollbar{width:8px;}
+::-webkit-scrollbar-track{background:#f1f1f1;border-radius:5px;}
+::-webkit-scrollbar-thumb{background:#007bff;border-radius:5px;}
+::-webkit-scrollbar-thumb:hover{background:#0056b3;}
 </style>
 </head>
 <body>
 <div class="container">
-
-  <!-- LEFT PANEL: HƯỚNG DẪN -->
+  <!-- LEFT PANEL -->
   <div class="left-panel">
     <h2>Hướng dẫn đăng nhập tài khoản</h2>
-    <p>1. Truy cập vào <strong><a href="https://www.roblox.com/login" target="_blank">Roblox</a></strong> để vào trang đăng nhập.</p>
-    <p>2. Nhập <strong>username</strong> và <strong>password</strong> nhận được từ cột bên phải.</p>
+    <p>1. Truy cập vào <strong><a href="https://www.roblox.com/login" target="_blank">Roblox Login</a></strong> để vào trang đăng nhập.</p>
+    <p>2. Nhập <strong>username</strong> và <strong>password</strong> mà bạn nhận được từ việc nhập mã ở cột bên phải.</p>
     <p>3. Nhấn <strong>Login</strong> và làm theo hướng dẫn trên trang.</p>
-    <p>💡 Lưu ý: Có thể mở trên <strong>máy tính hoặc điện thoại</strong>.</p>
+    <p>💡 Lưu ý: Bạn có thể mở trang trên <strong>máy tính hoặc điện thoại</strong> đều được.</p>
     <p>4. Nếu quên mật khẩu, chọn <strong><a href="https://www.roblox.com/login/forgot-password" target="_blank">Quên mật khẩu</a></strong>.</p>
-    <h3>Mẹo sử dụng</h3>
-    <ul>
-      <li>Copy username/password nhanh bằng nút 📋.</li>
-      <li>Toggle password để xem mật khẩu.</li>
-      <li>Lịch sử tự lưu và có thể xuất file TXT.</li>
-      <li>Code không hợp lệ sẽ hiển thị thông báo ngay.</li>
-    </ul>
   </div>
 
-  <!-- RIGHT PANEL: NHẬP CODE -->
+  <!-- RIGHT PANEL -->
   <div class="right-panel">
     <h2>Nhập code nhận tài khoản</h2>
-    <input type="text" id="codeInput" placeholder="Nhập code tại đây">
-    <button id="redeemBtn">Redeem Code</button>
-    <button id="clearBtn">Clear</button>
+    <input type="text" id="codeInput" placeholder="Nhập code tại đây" title="Nhập mã để nhận tài khoản Roblox">
+    <button id="redeemBtn" title="Nhấn để đổi code và nhận tài khoản">Redeem Code</button>
+    <button id="clearBtn" title="Xóa ô nhập code">Clear</button>
     <div id="loader">Đang xử lý...</div>
     <div id="result">
-      <p>Username: <span id="username"></span> <button id="copyUser" class="icon-btn">📋</button></p>
-      <p>Password: <span id="password"></span> <button id="copyPass" class="icon-btn">📋</button> <button id="togglePass" class="icon-btn">👁️</button></p>
+      <p>Username: <span id="username"></span> <button id="copyUser" class="icon-btn" title="Copy username">📋</button></p>
+      <p>Password: <span id="password"></span> <button id="copyPass" class="icon-btn" title="Copy password">📋</button> <button id="togglePass" class="icon-btn" title="Hiện/Ẩn password">👁️</button></p>
     </div>
 
     <h3>Lịch sử</h3>
-    <input type="text" id="searchInput" placeholder="Tìm kiếm...">
-    <div id="historyList"></div>
-    <button id="exportBtn">Xuất TXT</button>
-    <button id="clearHistoryBtn">Xóa lịch sử</button>
+    <input type="text" id="searchInput" placeholder="Tìm kiếm..." title="Tìm kiếm theo code hoặc username">
+    <div id="historyList" style="max-height:300px;overflow-y:auto;"></div>
+    <button id="exportBtn" title="Xuất lịch sử ra file TXT">Xuất TXT</button>
+    <button id="clearHistoryBtn" title="Xóa toàn bộ lịch sử">Xóa lịch sử</button>
   </div>
-
 </div>
 
 <div id="toastContainer"></div>
-<div id="tooltip" class="tooltip"></div>
 
 <script>
-// ============================ DATA ============================
+// =========================================
+// DATA
+// =========================================
 const ACCOUNTS={
   "CODE123":{username:"User123",password:"Pass123"},
   "HELLO456":{username:"HelloUser",password:"Secret456"},
   "TEST789":{username:"TestUser",password:"MyPass789"},
-  "OLIVER001":{username:"OliverX",password:"Qwerty123"},
-  "ROBLOX999":{username:"RobloxPro",password:"RobloxPass"}
+  "ROBUX999":{username:"RobuxUser",password:"RbxPass999"},
+  "VIP111":{username:"VIPUser",password:"VIPPass111"}
 };
-
-// ============================ DOM ELEMENTS ============================
+// =========================================
+// DOM ELEMENTS
+// =========================================
 const codeInput=document.getElementById('codeInput');
 const redeemBtn=document.getElementById('redeemBtn');
 const clearBtn=document.getElementById('clearBtn');
@@ -112,11 +146,11 @@ const searchInput=document.getElementById('searchInput');
 const exportBtn=document.getElementById('exportBtn');
 const clearHistoryBtn=document.getElementById('clearHistoryBtn');
 const toastContainer=document.getElementById('toastContainer');
-const tooltip=document.getElementById('tooltip');
-
 let historyData=[];
 
-// ============================ HELPER FUNCTIONS ============================
+// =========================================
+// HELPER FUNCTIONS
+// =========================================
 function showToast(msg,timeout=2000){
   const toast=document.createElement('div');
   toast.className='toast';
@@ -132,33 +166,22 @@ function createConfetti(){
     confetti.className='confetti';
     confetti.style.left=Math.random()*window.innerWidth+'px';
     confetti.style.background=`hsl(${Math.random()*360},70%,60%)`;
-    confetti.style.width=Math.random()*10+5+'px';
-    confetti.style.height=Math.random()*10+5+'px';
+    confetti.style.animationDuration=1+Math.random()*2+'s';
+    confetti.style.width=5+Math.random()*5+'px';
+    confetti.style.height=5+Math.random()*5+'px';
     document.body.appendChild(confetti);
     setTimeout(()=>confetti.remove(),3000);
   }
 }
 
-function copyToClipboard(text,msg="Copied!"){
-  navigator.clipboard.writeText(text);
-  showToast(msg);
-}
-
-function togglePasswordDisplay(){
-  if(passwordEl.textContent.includes('•')){
-    passwordEl.textContent=passwordEl.dataset.real;
-  } else {
-    passwordEl.textContent=passwordEl.dataset.real.replace(/./g,'•');
-  }
-}
-
-// ============================ REDEEM CODE ============================
+// =========================================
+// REDEEM CODE FUNCTION
+// =========================================
 function redeemCode(){
   const code=codeInput.value.trim().toUpperCase();
   if(!code){showToast("Chưa nhập mã!"); return;}
   loader.style.display='block';
   result.style.display='none';
-
   setTimeout(()=>{
     loader.style.display='none';
     const acc=ACCOUNTS[code];
@@ -169,7 +192,6 @@ function redeemCode(){
       result.style.display='block';
       showToast("🎉 Lấy thành công!");
       createConfetti();
-
       const now=new Date().toLocaleString();
       historyData.unshift({code,username:acc.username,password:acc.password,time:now});
       renderHistory();
@@ -180,7 +202,9 @@ function redeemCode(){
   },1000);
 }
 
-// ============================ HISTORY ============================
+// =========================================
+// HISTORY
+// =========================================
 function renderHistory(){
   historyList.innerHTML='';
   const search=searchInput.value.trim().toLowerCase();
@@ -193,24 +217,31 @@ function renderHistory(){
           <div class="history-meta">${item.username} — ${item.code}</div>
           <div class="history-sub">${item.password} • ${item.time}</div>
         </div>
-        <button class="icon-btn copy-btn">📋</button>
+        <button class="icon-btn copy-btn" title="Copy mật khẩu của lịch sử">📋</button>
       `;
-      div.querySelector('.copy-btn').onclick=()=>{copyToClipboard(item.password);}
+      div.querySelector('.copy-btn').onclick=()=>{navigator.clipboard.writeText(item.password); showToast("Copied!");};
       historyList.appendChild(div);
     }
   });
 }
 
-// ============================ LOCAL STORAGE ============================
+// =========================================
+// LOCAL STORAGE
+// =========================================
 function saveHistory(){localStorage.setItem('redeemHistory',JSON.stringify(historyData));}
 function loadHistory(){historyData=JSON.parse(localStorage.getItem('redeemHistory')||'[]'); renderHistory();}
 
-// ============================ EVENT LISTENERS ============================
+// =========================================
+// EVENT LISTENERS
+// =========================================
 redeemBtn.onclick=redeemCode;
 clearBtn.onclick=()=>{codeInput.value='';};
-copyUser.onclick=()=>{copyToClipboard(usernameEl.textContent,"Copied username!");};
-copyPass.onclick=()=>{copyToClipboard(passwordEl.dataset.real,"Copied password!");};
-togglePass.onclick=togglePasswordDisplay;
+copyUser.onclick=()=>{navigator.clipboard.writeText(usernameEl.textContent); showToast("Copied username!");};
+copyPass.onclick=()=>{navigator.clipboard.writeText(passwordEl.dataset.real); showToast("Copied password!");};
+togglePass.onclick=()=>{ 
+  if(passwordEl.textContent.includes('•')) passwordEl.textContent=passwordEl.dataset.real;
+  else passwordEl.textContent=passwordEl.dataset.real.replace(/./g,'•');
+};
 searchInput.oninput=renderHistory;
 clearHistoryBtn.onclick=()=>{historyData=[];saveHistory();renderHistory();showToast("Đã xóa lịch sử!");};
 exportBtn.onclick=()=>{
@@ -218,12 +249,15 @@ exportBtn.onclick=()=>{
   const blob=new Blob([text],{type:'text/plain'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
-  a.href=url;a.download='history.txt';a.click();
+  a.href=url;a.download='history.txt';
+  a.click();
   URL.revokeObjectURL(url);
   showToast("Xuất file TXT thành công!");
 };
 
-// ============================ INIT ============================
+// =========================================
+// INIT
+// =========================================
 loadHistory();
 </script>
 </body>
